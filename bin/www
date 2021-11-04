@@ -6,7 +6,7 @@
 
 const { app, io } = require('../app');
 var debug = require('debug')('project-two:server');
-var http = require('http');
+var https = require('https');
 
 /**
  * Get port from environment and store in Express.
@@ -16,10 +16,16 @@ var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
- * Create HTTP server.
+ * Create HTTPS server.
+ * https://letsencrypt.org/docs/certificates-for-localhost/ for key and certs generation + add days.
  */
 
-var server = http.createServer(app);
+const config = {
+  key: readFileSync(LOCALHOST_SSL_KEY),
+  cert: readFileSync(LOCALHOST_SSL_CERT),
+};
+
+const server = https.createServer(config, app);
 
 io.attach(server);
 /**
