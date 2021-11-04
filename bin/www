@@ -8,8 +8,8 @@
 const { readFileSync } = require('fs')
 
 const { app, io } = require('../app');
-var debug = require('debug')('project-two:server');
-var https = require('https');
+const debug = require('debug')('project-two:server');
+const https = require('https');
 
 /**
  * Environment Variables (We added this). Structures assignment
@@ -21,7 +21,7 @@ const { LOCALHOST_SSL_KEY, LOCALHOST_SSL_CERT } = process.env;
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
@@ -50,7 +50,7 @@ server.on('listening', onListening);
  */
 
 function normalizePort(val) {
-  var port = parseInt(val, 10);
+  const port = parseInt(val, 10);
 
   if (isNaN(port)) {
     // named pipe
@@ -98,8 +98,8 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
+  const addr = server.address();
+  const bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
