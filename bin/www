@@ -1,12 +1,21 @@
 #!/usr/bin/env node
-
+'use strict';
 /**
  * Module dependencies.
  */
 
+/* this is used to read our key and cert files, code from node js to pull just the values we need from the file*/
+const { readFileSync } = require('fs')
+
 const { app, io } = require('../app');
 var debug = require('debug')('project-two:server');
 var https = require('https');
+
+/**
+ * Environment Variables (We added this). Structures assignment
+ */
+
+const { LOCALHOST_SSL_KEY, LOCALHOST_SSL_CERT } = process.env;
 
 /**
  * Get port from environment and store in Express.
@@ -27,11 +36,11 @@ const config = {
 
 const server = https.createServer(config, app);
 
-io.attach(server);
 /**
  * Listen on provided port, on all network interfaces.
  */
 
+io.attach(server);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
