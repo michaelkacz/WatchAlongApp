@@ -34,6 +34,17 @@ html {
   background-color: #FAC898;
 }
 
+button.addvid {
+  display: inline-block;
+  background-color: #FFA500;
+  color: #000000;
+  font-weight: bold;
+  border: 0;
+  line-height: 1;
+  padding: 10px;
+  border-radius: 10px;
+  width: 120px;
+}
 
 /**
 Michael end
