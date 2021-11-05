@@ -2,7 +2,7 @@
 Common start
 */
 body {
-  padding: 50px;
+  margin: 0;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -43,6 +43,53 @@ Michael end
 Chiachi start
 */
 
+/* Style the header with a background */
+header {
+  background-color: #f1f1f1;
+  padding: 10px 10px;
+}
+
+/* Style the header */
+header a, header span {
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 12px;
+  line-height: 25px;
+  border-radius: 4px;
+}
+
+/* Style the logo */
+header a.logo {
+  font-size: 25px;
+  font-weight: bold;
+  color: #cc6600;
+}
+
+
+/* Style for button */
+header a.button {
+  background-color: dodgerblue;
+  color: white;
+}
+
+header .welcome {
+  color: #cc6600;
+}
+
+/* Responsive Design */
+@media only screen and (min-width: 768px) {
+  header a, header span  {
+    display: inline;
+  }
+
+  /* Float the link section to the right */
+  .header-right {
+    float: right;
+  }
+}
 
 
 /**
