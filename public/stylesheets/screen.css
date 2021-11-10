@@ -250,6 +250,15 @@ header .welcome {
   color: #cc6600;
 }
 
+#spacebar {
+  text-align: center;
+}
+
+#spacebar > span {
+  display: inline-block;
+  font-size: 25px;
+}
+
 /* Responsive Design */
 @media only screen and (min-width: 768px) {
   header a, header span  {
