@@ -10,7 +10,7 @@ a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,c
 Common start
 */
 body {
-  padding: 50px;
+  margin: 0;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -111,8 +111,35 @@ David end
 /**
 Michael start
 */
+html {
+  background-color: #FAC898;
+}
 
+div.addvid {
+  text-align: center;
+  margin-top: 6em;
+  margin-left: 30em;
+  padding-top: 12em;
+  padding-bottom: 5em;
+  padding-left: 16em;
+  padding-right: 16em;
+  background-color: #242526;
+  border-radius: 25px;
+  width: 200px;
+  height: 150px;
+}
 
+button.addvid {
+  display: inline-block;
+  background-color: #FFA500;
+  color: #000000;
+  font-weight: bold;
+  border: 0;
+  line-height: 1;
+  padding: 10px;
+  border-radius: 10px;
+  width: 120px;
+}
 
 /**
 Michael end
@@ -124,6 +151,53 @@ Michael end
 Chiachi start
 */
 
+/* Style the header with a background */
+header {
+  background-color: #f1f1f1;
+  padding: 10px 10px;
+}
+
+/* Style the header */
+header a, header span {
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 12px;
+  line-height: 25px;
+  border-radius: 4px;
+}
+
+/* Style the logo */
+header a.logo {
+  font-size: 25px;
+  font-weight: bold;
+  color: #cc6600;
+}
+
+
+/* Style for button */
+header a.button {
+  background-color: dodgerblue;
+  color: white;
+}
+
+header .welcome {
+  color: #cc6600;
+}
+
+/* Responsive Design */
+@media only screen and (min-width: 768px) {
+  header a, header span  {
+    display: inline;
+  }
+
+  /* Float the link section to the right */
+  .header-right {
+    float: right;
+  }
+}
 
 
 /**
