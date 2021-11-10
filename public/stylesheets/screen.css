@@ -22,11 +22,12 @@ main {
   display: grid;
   grid-template-columns: minmax(200px, 2fr) 1fr;
   grid-template-rows: 1fr 1fr;
+  grid-column-gap: 4em;
 }
 
 #video {
   grid-column: 1;
-  grid-row: 1/2
+  grid-row: 1/2;
 }
 
 #peers {
