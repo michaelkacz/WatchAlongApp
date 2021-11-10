@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0,shrink-to-fit=no" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous" />
-  <link rel="stylesheet" href="/stylesheets/screen.css" />
+  <link rel="stylesheet" href="../stylesheets/screen.css" />
 </head>
 <body>
   <header id="header">
@@ -20,7 +20,7 @@
     </div>
   </header>
   <main>
-    
+
     <article id="video">
       <!-- Chiachi  -->
 
@@ -28,6 +28,21 @@
 
     <article id="peers">
       <!-- David  -->
+      <h2>Videos: </h2>
+
+      <video id="self"
+      autoplay
+      muted
+      playsinline
+      poster="../images/placeholder.jpg">
+      </video>
+
+      <video id="peer"
+      autoplay
+      muted
+      playsinline
+      poster="../images/placeholder.jpg">
+      </video>
 
     </article>
 
@@ -35,12 +50,12 @@
       <!-- Michael  -->
 
     </article>
-  
+
   </main>
   <footer>
 
   </footer>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="/javascripts/main.js"></script>
+  <script src="../socket.io/socket.io.js"></script>
+  <script src="../javascripts/main.js"></script>
 </body>
 </html>
