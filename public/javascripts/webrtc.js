@@ -1,6 +1,20 @@
 const $self = {
+  /* common start */
   rtcConfig: null,
   mediaConstraints: { audio: true, video: true },
+  /* common end */
+
+  /* David start */
+
+  /* David end */
+
+  /*  Michael start */
+
+  /*  Michael end */
+
+  /* Chiachi start */
+
+  /* Chiachi end */
 };
 
 // For storing user video peers
