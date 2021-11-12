@@ -38,7 +38,7 @@ function registerChannelEvents() {
 function handleChannelConnect() {
   console.log('Connected to signaling server!');
   $self.id = sc.id;
-  console.log('Self ID: ${$self.id}');
+  console.log(`Self ID: ${$self.id}`);
 }
 
 function handleChannelConnectedPeers(ids) {
