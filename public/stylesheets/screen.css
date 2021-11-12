@@ -195,7 +195,7 @@ button.addvid {
   padding-top: 10em;
 }
 
-input {
+input #message {
   margin-left: 3px;
   margin-bottom: 3px;
   height: 1.5em;
