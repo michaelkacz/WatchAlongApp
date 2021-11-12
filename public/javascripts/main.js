@@ -1,3 +1,30 @@
+// Prepare the Multipeer Namespace
+function prepareNamespace(hash, set_location) {
+  // remove # from the hash
+  let ns = hash.replace(/^#/, '');
+  if (/^[a-z]{3}-[a-z]{3}-[a-z]{3}$/.test(ns)) {
+    console.log(`Checked existing namespace '${ns}'`);
+    return ns;
+  }
+  ns = generateRandomAlphaString('-', 3, 3, 3);
+  console.log(`Created new namespace '${ns}'`);
+  if (set_location) window.location.hash = ns;
+  return ns;
+}
+
+function generateRandomAlphaString(separator, ...groups) {
+  const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+  let ns = [];
+  for (let group of groups) {
+    let str = '';
+    for (let i = 0; i < group; i++) {
+      str += alphabet[Math.floor(Math.random() * alphabet.length)];
+    }
+    ns.push(str);
+  }
+  return ns.join(separator);
+}
+
 /**
 David start
 */
@@ -25,62 +52,6 @@ Michael end
 /**
 Chiachi start
 */
-// TODO get vidoe id from the room settings
-const videoId = 'npUlUdeU1vc';
-
-const iframeAPIScript = document.createElement('script');
-iframeAPIScript.src = 'https://www.youtube.com/iframe_api';
-document.getElementsByTagName('body')[0].append(iframeAPIScript);
-
-const playerDom = document.getElementById('player');
-let player;
-// This will be executed after the YouTubeIframeAPI is loaded.
-function onYouTubeIframeAPIReady() {
-  player = new YT.Player('player', {
-    height: playerDom.clientWidth * 0.5625,
-    width: playerDom.clientWidth,
-    videoId,
-    playerVars: {
-      modestbranding: 1,
-      controls: 0,
-      playsinline: 1
-    },
-    events: {
-      onReady: onPlayerReady,
-      onStateChange: onPlayerStateChange
-    }
-  });
-}
-
-// This will be called when the video player is ready.
-function onPlayerReady(event) {
-  console.log('ready...');
-}
-
-// The will be called when the player's state changes.
-function onPlayerStateChange(event) {
-  // TODO send command to everyone
-  console.log(event.data);
-}
-
-function startVideo() {
-  // TODO send start command to everyone
-  player.playVideo();
-}
-
-function pauseVideo() {
-  // TODO send pause command to everyone
-  player.pauseVideo();
-}
-
-function stopVideo() {
-  // TODO send stop command to everyone
-  player.stopVideo();
-}
-
-document.getElementById('play-video').addEventListener('click', startVideo);
-document.getElementById('pause-video').addEventListener('click', pauseVideo);
-document.getElementById('stop-video').addEventListener('click', stopVideo);
 
 
 /**
