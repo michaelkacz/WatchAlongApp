@@ -35,10 +35,10 @@ const $videoControlPeers = {
 /** Signaling-Channel Setup **/
 const namespace = prepareNamespace(window.location.hash, true);
 
-const sc = io.connect('/' + namespace, { autoConnect: true });
+const sc = io.connect('/' + namespace, { autoConnect: false });
 
 registerChannelEvents();
-
+sc.open();
 
 // Signaling Channel Events
 function registerChannelEvents() {
