@@ -37,7 +37,7 @@ mp_namespaces.on('connection',function(socket){
 
   // listen for signals
   socket.on('signal', function({to, ...rest}) {
-    socket.to(to).emit('signal', {to, ...rest})
+    socket.to(to).emit('signal', {to, ...rest});
   });
 
   // listen for disconnects

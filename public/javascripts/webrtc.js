@@ -9,18 +9,18 @@ const $self = {
 
   // computed property names
   [VIDEO_CHAT]: {
-    // [peerId]: isPolit...
+    // [peerId]: { isPolit, ... }
   },
   [TEXT_CHAT]: {
-    // [peerId]: isPolit...
+    // [peerId]: { isPolit, ... }
   },
   [VIDEO_CONTROL]: {
-    // [peerId]: isPolit...
+    // [peerId]: { isPolit, ... }
   },
   /* common end */
 
   /* David start */
-  mediaConstraints: { audio: true, video: true },
+  mediaConstraints: { audio: false, video: true },
 
   /* David end */
 
@@ -30,6 +30,8 @@ const $self = {
 
   /* Chiachi start */
   controlDCId: 99,
+  videoId: 'npUlUdeU1vc',
+  player: null,
 
   /* Chiachi end */
 };
@@ -38,13 +40,13 @@ const $self = {
 // For storing user video peers
 const $peers = {
   [VIDEO_CHAT]: {
-    // [peerId]: connection...
+    // [peerId]: { connection, ... }
   },
   [TEXT_CHAT]: {
-    // [peerId]: connection...
+    // [peerId]: { connection, ... }
   },
   [VIDEO_CONTROL]: {
-    // [peerId]: connection...
+    // [peerId]: { connection, ... }
   },
 };
 
@@ -85,6 +87,9 @@ function handleChannelConnectedPeers(ids) {
       initializeSelfAndPeerByIdAndType(VIDEO_CHAT, id, true);
       establishCallFeatures(id);
 
+      initializeSelfAndPeerByIdAndType(TEXT_CHAT, id, true);
+      establishTextChatFeatures(id);
+
       initializeSelfAndPeerByIdAndType(VIDEO_CONTROL, id, true);
       establishVideoControlFeatures(id);
     }
@@ -97,6 +102,8 @@ function handleChannelConnectedPeer(id) {
   initializeSelfAndPeerByIdAndType(VIDEO_CHAT, id, false);
   establishCallFeatures(id);
 
+  initializeSelfAndPeerByIdAndType(TEXT_CHAT, id, false);
+  establishTextChatFeatures(id);
 
   initializeSelfAndPeerByIdAndType(VIDEO_CONTROL, id, false);
   establishVideoControlFeatures(id);
@@ -192,52 +199,6 @@ function registerRtcEvents(type, id, handler) {
   }
 }
 
-function establishCallFeatures(id) {
-  /* David */
-  registerRtcEvents(VIDEO_CHAT, id, videoChatOnTrack);
-  addStreamingMedia(id, $self.stream);
-}
-
-function videoChatOnTrack(type, id, stream) {
-  /* David */
-  console.log('handle video chat ontrack');
-}
-
-function addStreamingMedia(id, stream) {
-  /* David */
-  const peer = $peers[VIDEO_CHAT][id];
-  if (stream) {
-    for (let track of stream.getTracks()) {
-      peer.connection.addTrack(track, stream);
-    }
-  }
-}
-
-function establishTextChatFeatures(id) {
-  /* Michael */
-  registerRtcEvents(TEXT_CHAT, id, textChatOnDataChannel);
-}
-
-function textChatOnDataChannel(type, id, channel) {
-  /* Michael */
-  console.log('handle text chat ondatachannel');
-}
-
-function establishVideoControlFeatures(id) {
-  /* Chiachi */
-  registerRtcEvents(VIDEO_CONTROL, id, videoControlOnDataChannel);
-  const peer = $peers[VIDEO_CONTROL][id];
-  peer.dataChannel = peer.connection.createDataChannel(VIDEO_CONTROL, {
-    negotiated: true,
-    id: $self.controlDCId,
-  });
-  peer.dataChannel.onmessage = handleVideoControl;
-}
-
-function videoControlOnDataChannel(type, id, channel) {
-  console.log('handle video control ondatachannel', type, id, channel);
-}
-
 async function handleRtcNegotiation(type, id) {
   const myself = $self[type][id];
   const peer = $peers[type][id];
@@ -280,7 +241,23 @@ function handleIceCandidate(type, id, candidate) {
 /**
 David start
 */
+function establishCallFeatures(id) {
+  registerRtcEvents(VIDEO_CHAT, id, videoChatOnTrack);
+  addStreamingMedia(id, $self.stream);
+}
 
+function videoChatOnTrack(type, id, stream) {
+  console.log('handle video chat ontrack');
+}
+
+function addStreamingMedia(id, stream) {
+  const peer = $peers[VIDEO_CHAT][id];
+  if (stream) {
+    for (let track of stream.getTracks()) {
+      peer.connection.addTrack(track, stream);
+    }
+  }
+}
 
 
 /**
@@ -292,7 +269,13 @@ David end
 /**
 Michael start
 */
+function establishTextChatFeatures(id) {
+  registerRtcEvents(TEXT_CHAT, id, textChatOnDataChannel);
+}
 
+function textChatOnDataChannel(type, id, channel) {
+  console.log('handle text chat ondatachannel');
+}
 
 
 /**
@@ -305,20 +288,31 @@ Michael end
 Chiachi start
 */
 // TODO get vidoe id from the room settings
-const videoId = 'npUlUdeU1vc';
+function establishVideoControlFeatures(id) {
+  registerRtcEvents(VIDEO_CONTROL, id, videoControlOnDataChannel);
+  const peer = $peers[VIDEO_CONTROL][id];
+  peer.dataChannel = peer.connection.createDataChannel(VIDEO_CONTROL, {
+    negotiated: true,
+    id: $self.controlDCId,
+  });
+  peer.dataChannel.onmessage = handleVideoControl;
+}
+
+function videoControlOnDataChannel(type, id, channel) {
+  console.log('handle video control ondatachannel', type, id, channel);
+}
 
 const iframeAPIScript = document.createElement('script');
 iframeAPIScript.src = 'https://www.youtube.com/iframe_api';
 document.getElementsByTagName('body')[0].append(iframeAPIScript);
 
 const playerDom = document.getElementById('player');
-let player;
 // This will be executed after the YouTubeIframeAPI is loaded.
 function onYouTubeIframeAPIReady() {
-  player = new YT.Player('player', {
+  $self.player = new YT.Player('player', {
     height: playerDom.clientWidth * 0.5625,
     width: playerDom.clientWidth,
-    videoId,
+    videoId: $self.videoId,
     playerVars: {
       modestbranding: 1,
       controls: 0,
@@ -335,34 +329,39 @@ function onYouTubeIframeAPIReady() {
 function onPlayerReady(event) {
   console.log('ready...');
   // Mute to prevent this error "Autoplay is only allowed when approved by the user, the site is activated by the user, or media is muted."
-  player.mute();
+  $self.player.mute();
 }
 
 // The will be called when the player's state changes.
 function onPlayerStateChange(event) {
-  // TODO send command to everyone
-  console.log(event.data);
+  // TODO send command to everyone from some use cases
+  if (event.data == YT.PlayerState.PLAYING) {
+    console.log('playing...');
+  }
 }
 
-function startVideo(skipSendCommand) {
-  if (!skipSendCommand) {
+function startVideo(event) {
+  if (event) {
+    // command initiate from the user so send the command to everyone
     sendControlCommand('start');
   }
-  player.playVideo();
+  $self.player.playVideo();
 }
 
-function pauseVideo(skipSendCommand) {
-  if (!skipSendCommand) {
+function pauseVideo(event) {
+  if (event) {
+    // command initiate from the user so send the command to everyone
     sendControlCommand('pause');
   }
-  player.pauseVideo();
+  $self.player.pauseVideo();
 }
 
-function stopVideo(skipSendCommand) {
-  if (!skipSendCommand) {
+function stopVideo(event) {
+  if (event) {
+    // command initiate from the user so send the command to everyone
     sendControlCommand('stop');
   }
-  player.stopVideo();
+  $self.player.stopVideo();
 }
 
 function sendControlCommand(command) {
@@ -376,22 +375,22 @@ function handleVideoControl({ data }) {
   console.log(data);
   switch(data) {
     case 'start':
-      startVideo(true);
+      startVideo();
       break;
     case 'pause':
-      pauseVideo(true);
+      pauseVideo();
       break;
     case 'stop':
-      stopVideo(true);
+      stopVideo();
       break;
     default:
       console.log('unknown command');
   }
 }
 
-document.getElementById('play-video').addEventListener('click', () => startVideo());
-document.getElementById('pause-video').addEventListener('click', () => pauseVideo());
-document.getElementById('stop-video').addEventListener('click', () => stopVideo());
+document.getElementById('play-video').addEventListener('click', startVideo);
+document.getElementById('pause-video').addEventListener('click', pauseVideo);
+document.getElementById('stop-video').addEventListener('click', stopVideo);
 
 
 /**
