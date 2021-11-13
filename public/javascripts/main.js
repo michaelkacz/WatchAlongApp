@@ -53,7 +53,12 @@ const open = document.getElementById('openchat');
        open.style.display = "block";
        console.log('Chat Closed!');
   }
-};
+  else {
+          form.style.display = "block";
+          title.style.display = "block";
+          closechat.style.display = "block";
+          open.style.display = "none";
+  }};
 
 /**
 Michael end
