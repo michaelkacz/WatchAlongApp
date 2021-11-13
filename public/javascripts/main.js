@@ -46,7 +46,9 @@ closechat.onclick = function (){
 const form = document.getElementById('chatform');
 const title = document.getElementById('chat-head');
 const open = document.getElementById('openchat');
+const article = document.getElementById('data');
   if (form.style.display === "block" && title.style.display === "block") {
+       article.style.background = "none";
        form.style.display = "none";
        title.style.display = "none";
        closechat.style.display = "none";
