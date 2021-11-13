@@ -62,6 +62,7 @@ closechat.onclick = function (){
             open.style.display = "none";
     }};
 
+//function to open chat
 openchat.onclick = function() {
   const form = document.getElementById('chatform');
   const title = document.getElementById('chat-head');
