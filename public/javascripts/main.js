@@ -41,7 +41,19 @@ David end
 Michael start
 */
 
-
+//function to close chat
+closechat.onclick = function (){
+const form = document.getElementById('chatform');
+const title = document.getElementById('chat-head');
+const open = document.getElementById('openchat');
+  if (form.style.display === "block" && title.style.display === "block") {
+       form.style.display = "none";
+       title.style.display = "none";
+       closechat.style.display = "none";
+       open.style.display = "block";
+       console.log('Chat Closed!');
+  }
+};
 
 /**
 Michael end
