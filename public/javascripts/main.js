@@ -41,7 +41,47 @@ David end
 Michael start
 */
 
+//function to close chat
+closechat.onclick = function (){
+  const form = document.getElementById('chatform');
+  const title = document.getElementById('chat-head');
+  const open = document.getElementById('openchat');
+  const article = document.getElementById('data');
+    if (form.style.display === "block" && title.style.display === "block") {
+        article.style.background = "none";
+        form.style.display = "none";
+        title.style.display = "none";
+        closechat.style.display = "none";
+        open.style.display = "block";
+        console.log('Chat Closed!');
+    }
+    else {
+            form.style.display = "block";
+            title.style.display = "block";
+            closechat.style.display = "block";
+            open.style.display = "none";
+    }};
 
+//function to open chat
+openchat.onclick = function() {
+  const form = document.getElementById('chatform');
+  const title = document.getElementById('chat-head');
+  const open = document.getElementById('openchat');
+  const article = document.getElementById('data');
+    if (form.style.display === "none" && title.style.display === "none") {
+         article.style.background = "#FFA500";
+         form.style.display = "block";
+         title.style.display = "block";
+         closechat.style.display = "block";
+         open.style.display = "none";
+         console.log('Chat Opened!');
+    }
+    else {
+            form.style.display = "none";
+            title.style.display = "none";
+            closechat.style.display = "none";
+            open.style.display = "block";
+    }};
 
 /**
 Michael end
