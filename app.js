@@ -35,13 +35,13 @@ mp_namespaces.on('connection',function(socket){
   // send the connecting peer ID to all connected peers
   socket.broadcast.emit('connected peer', socket.id);
 
-   // listen for signals
-  socket.on('signal', function({to, from, signal}) {
-    socket.to(to).emit('signal', {to, from, signal})
-    })
-   // listen for disconnects
-   socket.on('disconnect', function(){
-     namespaces.emit('disconnected peer', socket.id);
-   })
+  // listen for signals
+  socket.on('signal', function({to, ...rest}) {
+    socket.to(to).emit('signal', {to, ...rest});
+  });
 
+  // listen for disconnects
+  socket.on('disconnect', function(){
+    namespaces.emit('disconnected peer', socket.id);
+  });
 });
