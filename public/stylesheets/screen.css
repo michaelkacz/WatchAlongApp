@@ -21,7 +21,7 @@ a {
 main {
   display: grid;
   grid-template-columns: minmax(200px, 2fr) 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: auto auto;
   grid-column-gap: 4em;
 }
 
