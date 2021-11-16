@@ -56,7 +56,9 @@ main {
   grid-column: 2;
   grid-row: 2;
   padding-top: 6em;
-  background-color: #FFA500;
+  background-color: #FF8040;
+  margin-bottom: 23.5em;
+  padding-left: 0.25em;
 }
 
 
@@ -205,11 +207,11 @@ button.addvid {
   padding-top: 10em;
 }
 
-input #message {
+#message {
   margin-left: 3px;
   margin-bottom: 3px;
   height: 1.5em;
-  width: 35em;
+  width: 34em;
   border-radius: 10px;
   border: 2px solid white;
 }
@@ -220,6 +222,7 @@ input #message {
   border: 0.25em;
   padding: 0.5em;
   border-radius: 15px;
+  width: fit-content;
 }
 
 ol {
