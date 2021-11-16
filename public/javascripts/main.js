@@ -69,7 +69,7 @@ openchat.onclick = function() {
   const open = document.getElementById('openchat');
   const article = document.getElementById('data');
     if (form.style.display === "none" && title.style.display === "none") {
-         article.style.background = "#FFA500";
+         article.style.background = "#FF8040";
          form.style.display = "block";
          title.style.display = "block";
          closechat.style.display = "block";
