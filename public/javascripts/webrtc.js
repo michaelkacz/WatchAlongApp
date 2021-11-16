@@ -122,8 +122,13 @@ function handleChannelConnectedPeer(id) {
   establishVideoControlFeatures(id);
 }
 
-function initializeSelfAndPeerByIdAndType(type, id, isPolite) {
-  $self[type][id] = { isPolite };
+function initializeSelfAndPeerByIdAndType(type, id, politeness) {
+  $self[type][id] = {
+    isPolite: politeness,
+    isMakingOffer: false,
+    isIgnoringOffer: false,
+    isSettingRemoteAnswerPending: false
+  };
   $peers[type][id] = { connection: new RTCPeerConnection($self.rtcConfig) };
 }
 
