@@ -17,7 +17,8 @@
     <article id="CreatePopUp">
       <form id="CreateForm" action="#null" method="get">
         <input id="RoomID" type="number" autocomplete="off" placeholder="859214" readonly/>
-        <input class="Name" type="text" autocomplete="off" placeholder="Your Name"/>
+        <label for="UserName">Display Name:</label>
+        <input id="SelfName" class="Name" type="text" autocomplete="off" placeholder="Your Name"/>
         <button id="CreateFormButton" type="submit">Create Party</button>
       </form>
     </article>
@@ -30,7 +31,8 @@
     <article id="JoinPopUp">
       <form id="JoinForm" action="#null" method="get">
         <input id="RoomID" type="number" autocomplete="off" placeholder="859214"/>
-        <input class="Name" type="text" autocomplete="off" placeholder="Your Name"/>
+        <label for="UserName">Display Name:</label>
+        <input id="UserName" class="Name" type="text" autocomplete="off" placeholder="Your Name"/>
         <button id="JoinFormButton" type="submit">Join Party</button>
       </form>
     </article>
