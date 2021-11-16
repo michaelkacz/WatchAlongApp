@@ -214,6 +214,18 @@ input #message {
   border: 2px solid white;
 }
 
+#chat-log .self {
+  background: #BFEFFF;
+  text-align: right;
+  border: 0.25em;
+  padding: 0.5em;
+  border-radius: 15px;
+}
+
+ol {
+  padding-bottom: 1em;
+}
+
 /**
 Michael end
 */
