@@ -27,7 +27,10 @@ main {
 
 #video {
   grid-column: 1;
-  grid-row: 1/2;
+  grid-row: 1 / span 2;
+  display: flex;
+  row-gap: 1em;
+  flex-direction: column;
 }
 
 #userVideos {
@@ -44,12 +47,17 @@ main {
 
 figure {
   position: relative;
+  min-height: auto;
+  max-height: auto;
+}
+video {
+  display: block;
 }
 figcaption {
-  position: absolute;
-  bottom: 0;
-  left: 0;
+  margin-top: -1.5em;
+  margin-left: 1em;
 }
+
 
 #self {
   margin-block: 1em;
@@ -283,8 +291,14 @@ header .welcome {
   color: #cc6600;
 }
 
+#player {
+  order: 1;
+  flex: 1 0 auto;
+}
+
 #spacebar {
   text-align: center;
+  order: 2;
 }
 
 #spacebar > span {
