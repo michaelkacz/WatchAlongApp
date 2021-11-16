@@ -283,6 +283,30 @@ function textChatOnDataChannel(type, id, channel) {
   console.log('handle text chat ondatachannel');
 }
 
+const chatform = document.querySelector('#data');
+  chatform.addEventListener('submit', handleTextChat);
+
+  function handleTextChat(e) {
+    e.preventDefault();
+    const form = e.target;
+    const input = form.querySelector('#message');
+    const message = input.value;
+
+    appendMessage('self', message,);
+    $textchat.dataChannel.send(message);
+
+    console.log('Message:', message);
+    input.value = '';
+  }
+
+function appendMessage (sender, message) {
+  const log = document.querySelector('#chat-log');
+  const li = document.createElement('li');
+  li.innerText = message;
+  li.className = sender;
+  log.appendChild(li);
+}
+
 
 /**
 Michael end
