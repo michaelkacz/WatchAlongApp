@@ -25,7 +25,7 @@ const $self = {
   /* David end */
 
   /*  Michael start */
-
+  controlTextId: 88,
   /*  Michael end */
 
   /* Chiachi start */
@@ -271,6 +271,12 @@ Michael start
 */
 function establishTextChatFeatures(id) {
   registerRtcEvents(TEXT_CHAT, id, textChatOnDataChannel);
+  const textpeer = $peers[TEXT_CHAT][id];
+  textpeer.dataChannel = textpeer.connection.createDataChannel(TEXT_CHAT, {
+    negotiated: true,
+    id: $self.controlTextId,
+  });
+  textpeer.dataChannel.onmessage = handleTextChat;
 }
 
 function textChatOnDataChannel(type, id, channel) {
