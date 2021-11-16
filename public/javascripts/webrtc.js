@@ -56,6 +56,8 @@ navigator.mediaDevices.getUserMedia($self.mediaConstraints).then((stream) => {
 });
 */
 
+requestUserMedia($self.mediaConstraints);
+
 /*
 First page forms
 */
@@ -252,6 +254,45 @@ function handleIceCandidate(type, id, candidate) {
 /**
 David start
 */
+
+async function requestUserMedia(media_constraints) {
+  $self.stream = new MediaStream();
+  $self.media = await navigator.mediaDevices
+    .getUserMedia(media_constraints);
+  $self.stream.addTrack($self.media.getTracks()[0]);
+  displayStream('#self', $self.stream);
+}
+
+function createVideoElement(id) {
+  const figure = document.createElement('figure');
+  const figcaption = document.creaetElement('figcaption');
+  const video = document.createElement('video');
+  const video_attributes = {
+    'autoplay': '',
+    'playsinline': '',
+    'poster': '../images/placeholder.jpg'
+  };
+
+  figcaption.innerText = id;
+  for (let attr in video_attributes){
+    video.setAttribute(attr, video_attributes[attr]);
+  }
+  figure.appendChild(video);
+  figure.appendChild(figcaption);
+  return figure;
+}
+
+function displayStream(selector, stream) {
+  let video_element = document.querySelector(selector);
+  if (!video_element) {
+    selector = sc.id; //need to create a new peer id if none exists
+    video_element = createVideoElement(selector);
+  }
+  let video = video_element.querySelector('video');
+  video.srcObject = stream;
+  document.querySelector('#userVideos').appendChild(video_element);
+}
+
 function establishCallFeatures(id) {
   registerRtcEvents(VIDEO_CHAT, id, videoChatOnTrack);
   addStreamingMedia(id, $self.stream);
