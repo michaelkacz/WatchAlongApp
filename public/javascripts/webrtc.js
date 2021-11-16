@@ -56,6 +56,17 @@ navigator.mediaDevices.getUserMedia($self.mediaConstraints).then((stream) => {
 });
 */
 
+/*
+First page forms
+*/
+function handleUserNames(event) {
+  event.preventDefault();
+  const form = event.target;
+  const username = form.querySelector('#username-input').value;
+  const figcaption = document.querySelector('#self figcaption');
+  figcaption.innerText = username;
+}
+
 /** Signaling-Channel Setup **/
 const namespace = prepareNamespace(window.location.hash, true);
 
