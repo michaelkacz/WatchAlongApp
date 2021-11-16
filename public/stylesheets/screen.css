@@ -214,11 +214,21 @@ button.addvid {
  bottom: 8.5em;
 }
 
+#openchat {
+ color: black;
+ background-color: green;
+ border-radius: 5px;
+ border: 2px solid white;
+ float: right;
+ position: relative;
+ bottom: 8.5em;
+}
+
 #chat-log {
   padding-top: 10em;
 }
 
-input {
+input #message {
   margin-left: 3px;
   margin-bottom: 3px;
   height: 1.5em;
