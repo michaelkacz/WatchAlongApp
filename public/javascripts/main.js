@@ -47,11 +47,15 @@ closechat.onclick = function (){
   const title = document.getElementById('chat-head');
   const open = document.getElementById('openchat');
   const article = document.getElementById('data');
+  const dark = document.getElementById('dark');
+  const light = document.getElementById('light');
     if (form.style.display === "block" && title.style.display === "block") {
         article.style.background = "none";
         form.style.display = "none";
         title.style.display = "none";
         closechat.style.display = "none";
+        dark.style.display = "none";
+        light.style.display = "none";
         open.style.display = "block";
         console.log('Chat Closed!');
     }
@@ -68,11 +72,15 @@ openchat.onclick = function() {
   const title = document.getElementById('chat-head');
   const open = document.getElementById('openchat');
   const article = document.getElementById('data');
+  const dark = document.getElementById('dark');
+  const light = document.getElementById('light');
     if (form.style.display === "none" && title.style.display === "none") {
          article.style.background = "#FF8040";
          form.style.display = "block";
          title.style.display = "block";
          closechat.style.display = "block";
+         dark.style.display = "block";
+         light.style.display = "block";
          open.style.display = "none";
          console.log('Chat Opened!');
     }
