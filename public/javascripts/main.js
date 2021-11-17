@@ -98,6 +98,7 @@ openchat.onclick = function() {
     const article = document.getElementById('data');
     const title = document.getElementById('chat-head');
         title.style.color = "#FFFFFF"
+        title.style.borderBottom = "4px solid #1E3F66";
         article.style.background = "#000000";
         article.style.border = "4px solid #1E3F66";
   }
@@ -107,6 +108,7 @@ openchat.onclick = function() {
     const article = document.getElementById('data');
     const title = document.getElementById('chat-head');
         title.style.color = "#000000";
+        title.style.borderBottom = "4px solid #FAC898";
         article.style.background = "#FF8040";
         article.style.border = "4px solid #000000";
   }
