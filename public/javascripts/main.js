@@ -83,6 +83,19 @@ openchat.onclick = function() {
             open.style.display = "block";
     }};
 
+  dark.onclick = function() {
+    const article = document.getElementById('data');
+    const title = document.getElementById('chat-head');
+        title.style.color = "#FFFFFF"
+        article.style.background = "#000000";
+  }
+
+  light.onclick = function() {
+    const article = document.getElementById('data');
+    const title = document.getElementById('chat-head');
+        title.style.color = "#000000";
+        article.style.background = "#FF8040";
+  }
 /**
 Michael end
 */
