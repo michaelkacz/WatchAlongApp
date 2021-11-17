@@ -40,13 +40,22 @@ David end
 /**
 Michael start
 */
-
-const createbutton = document.getElementById('CreateFormButton')
-  createbutton.onclick = function URL() {
+const createbutton = document.getElementById('CreateFormButton');
+if (createbutton) {
+  createbutton.onclick = function createURL() {
     location.href = 'https://localhost:3000/party-room';
-  }
+  }}
+
+const joininput = document.getElementById('RoomID');
+const joinparty = document.getElementById('JoinFormButton');
+if (joinparty) {
+  joinparty.onclick = function joinURL() {
+    location.href = 'https://localhost:3000/party-room/#' + joininput;
+  }}
 
 //function to close chat
+const closechat = document.getElementById('closechat');
+if (closechat) {
 closechat.onclick = function (){
   const form = document.getElementById('chatform');
   const title = document.getElementById('chat-head');
@@ -70,9 +79,11 @@ closechat.onclick = function (){
             title.style.display = "block";
             closechat.style.display = "block";
             open.style.display = "none";
-    }};
+    }}};
 
 //function to open chat
+const openchat = document.getElementById('openchat');
+if (openchat) {
 openchat.onclick = function() {
   const form = document.getElementById('chatform');
   const title = document.getElementById('chat-head');
@@ -96,9 +107,11 @@ openchat.onclick = function() {
             title.style.display = "none";
             closechat.style.display = "none";
             open.style.display = "block";
-    }};
+    }}};
 
 //dark mode function
+const dark = document.getElementById('dark');
+if (dark) {
   dark.onclick = function() {
     const article = document.getElementById('data');
     const title = document.getElementById('chat-head');
@@ -106,9 +119,11 @@ openchat.onclick = function() {
         title.style.borderBottom = "4px solid #1E3F66";
         article.style.background = "#000000";
         article.style.border = "4px solid #1E3F66";
-  }
+  }}
 
 //light mode function
+const light = document.getElementById('light');
+if (light) {
   light.onclick = function() {
     const article = document.getElementById('data');
     const title = document.getElementById('chat-head');
@@ -116,7 +131,8 @@ openchat.onclick = function() {
         title.style.borderBottom = "4px solid #FAC898";
         article.style.background = "#FF8040";
         article.style.border = "4px solid #000000";
-  }
+  }}
+
 /**
 Michael end
 */
