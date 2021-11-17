@@ -41,6 +41,11 @@ David end
 Michael start
 */
 
+const createbutton = document.getElementById('CreateFormButton')
+  createbutton.onclick = function URL() {
+    location.href = 'https://localhost:3000/party-room';
+  }
+
 //function to close chat
 closechat.onclick = function (){
   const form = document.getElementById('chatform');
