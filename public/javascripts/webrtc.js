@@ -276,7 +276,7 @@ function establishTextChatFeatures(id) {
     negotiated: true,
     id: $self.controlTextId,
   });
-  peer.dataChannel.onmessage = handleTextChat;
+  peer.dataChannel.onmessage = handleTextMessage;
 }
 
 function textChatOnDataChannel(type, id, channel) {
@@ -285,6 +285,15 @@ function textChatOnDataChannel(type, id, channel) {
 
 const chatform = document.querySelector('#data');
   chatform.addEventListener('submit', handleTextChat);
+
+  function handleTextMessage( {data} , sender) {
+    console.log('Message: ', data);
+    const log = document.querySelector('#chat-log');
+    const li = document.createElement('li');
+    li.innerText = data;
+    li.className = sender;
+    log.appendChild(li);
+  }
 
   function handleTextChat(e) {
     e.preventDefault();
