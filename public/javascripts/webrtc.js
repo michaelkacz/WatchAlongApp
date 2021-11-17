@@ -271,12 +271,12 @@ Michael start
 */
 function establishTextChatFeatures(id) {
   registerRtcEvents(TEXT_CHAT, id, textChatOnDataChannel);
-  const textpeer = $peers[TEXT_CHAT][id];
-  textpeer.dataChannel = textpeer.connection.createDataChannel(TEXT_CHAT, {
+  const peer = $peers[TEXT_CHAT][id];
+  peer.dataChannel = peer.connection.createDataChannel(TEXT_CHAT, {
     negotiated: true,
     id: $self.controlTextId,
   });
-  textpeer.dataChannel.onmessage = handleTextChat;
+  peer.dataChannel.onmessage = handleTextChat;
 }
 
 function textChatOnDataChannel(type, id, channel) {
@@ -293,7 +293,10 @@ const chatform = document.querySelector('#data');
     const message = input.value;
 
     appendMessage('self', message,);
-    $textchat.dataChannel.send(message);
+    for(let peerID in $peers[TEXT_CHAT]) {
+      console.log('Sending message to:', peerID);
+      $peers[TEXT_CHAT][peerID].dataChannel.send(message);
+    }
 
     console.log('Message:', message);
     input.value = '';
@@ -402,7 +405,7 @@ function sendControlCommand(command) {
 }
 
 function handleVideoControl({ data }) {
-  console.log(data);
+  //console.log(data);
   switch(data) {
     case 'start':
       startVideo();
@@ -414,7 +417,7 @@ function handleVideoControl({ data }) {
       stopVideo();
       break;
     default:
-      console.log('unknown command');
+      //console.log('unknown command');
   }
 }
 
