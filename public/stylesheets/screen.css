@@ -222,7 +222,14 @@ button.addvid {
   border: 0.25em;
   padding: 0.5em;
   border-radius: 15px;
-  width: fit-content;
+}
+
+#chat-log .peers {
+  background: #D3D3D3;
+  text-align: left;
+  border: 0.25em;
+  padding: 0.5em;
+  border-radius: 15px;
 }
 
 ol {
