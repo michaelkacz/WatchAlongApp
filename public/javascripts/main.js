@@ -93,6 +93,7 @@ openchat.onclick = function() {
             open.style.display = "block";
     }};
 
+//dark mode function
   dark.onclick = function() {
     const article = document.getElementById('data');
     const title = document.getElementById('chat-head');
@@ -101,6 +102,7 @@ openchat.onclick = function() {
         article.style.border = "4px solid #1E3F66";
   }
 
+//light mode function
   light.onclick = function() {
     const article = document.getElementById('data');
     const title = document.getElementById('chat-head');
