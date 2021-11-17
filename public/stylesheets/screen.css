@@ -193,6 +193,12 @@ button.addvid {
  bottom: 8.5em;
 }
 
+#light, #dark {
+  float: right;
+  position: relative;
+  bottom: 8.5em;
+}
+
 #openchat {
  color: black;
  background-color: green;
