@@ -210,7 +210,7 @@ function registerRtcEvents(type, id, handler) {
   peer.connection.onicecandidate = ({ candidate }) => handleIceCandidate(type, id, candidate);
 
   if (type === VIDEO_CHAT) {
-    peer.connection.ontrack = ({ streams: [stream] }) => handler(type, id, stream);
+    peer.connection.ontrack = handleRtcPeerTrack(id);
   } else {
     // The rest of types are data channel event
     peer.connection.ondatachannel = ({ channel }) => handler(type, id, channel);
@@ -254,6 +254,13 @@ function handleIceCandidate(type, id, candidate) {
     type,
     candidate
   });
+}
+
+function handleRtcPeerTrack() {
+  return function({ streams: [stream] }) {
+  console.log('Attemp to display peer media...');
+  displayStream(`#peer ID: ${id}`, stream);
+  }
 }
 
 /**
