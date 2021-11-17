@@ -205,9 +205,10 @@ button.addvid {
  background-color: green;
  border-radius: 5px;
  border: 2px solid white;
- float: right;
  position: relative;
  bottom: 8.5em;
+ margin-left: 16em;
+ padding: 1.5em;
 }
 
 #chat-log {
