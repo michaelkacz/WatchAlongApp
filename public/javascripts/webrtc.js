@@ -30,7 +30,7 @@ const $self = {
 
   /* Chiachi start */
   controlDCId: 99,
-  videoId: 'npUlUdeU1vc',
+  videoId: '9-14W5Q1sfk',
   player: null,
 
   /* Chiachi end */
