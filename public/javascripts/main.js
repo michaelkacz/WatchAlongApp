@@ -51,6 +51,7 @@ closechat.onclick = function (){
   const light = document.getElementById('light');
     if (form.style.display === "block" && title.style.display === "block") {
         article.style.background = "none";
+        article.style.border = "0px";
         form.style.display = "none";
         title.style.display = "none";
         closechat.style.display = "none";
@@ -76,6 +77,7 @@ openchat.onclick = function() {
   const light = document.getElementById('light');
     if (form.style.display === "none" && title.style.display === "none") {
          article.style.background = "#FF8040";
+         article.style.border = "4px solid #000000";
          form.style.display = "block";
          title.style.display = "block";
          closechat.style.display = "block";
@@ -96,6 +98,7 @@ openchat.onclick = function() {
     const title = document.getElementById('chat-head');
         title.style.color = "#FFFFFF"
         article.style.background = "#000000";
+        article.style.border = "4px solid #1E3F66";
   }
 
   light.onclick = function() {
@@ -103,6 +106,7 @@ openchat.onclick = function() {
     const title = document.getElementById('chat-head');
         title.style.color = "#000000";
         article.style.background = "#FF8040";
+        article.style.border = "4px solid #000000";
   }
 /**
 Michael end
