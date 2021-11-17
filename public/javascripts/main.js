@@ -1,27 +1,5 @@
 'use strict'
 
-const $self = {
-  rtcConfig: null,
-  mediaConstrains: { audio: false, video: true }
-};
-
-const $peers = {
-
-};
-
-/* Set up a stream by grabbing self and peers */
-
-/* DOM media events */
-
-/* Socket Server Events and Callbacks*/
-
-/* DOM Events */
-
-/* WebRTC Events */
-
-/* Signaling Channel Events */
-
-
 // Prepare the Multipeer Namespace
 function prepareNamespace(hash, set_location) {
   // remove # from the hash
