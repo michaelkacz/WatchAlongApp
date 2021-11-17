@@ -1,3 +1,5 @@
+'use strict'
+
 // Prepare the Multipeer Namespace
 function prepareNamespace(hash, set_location) {
   // remove # from the hash

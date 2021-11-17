@@ -186,7 +186,7 @@ async function handleChannelSignal({ from, to, type, description, candidate, res
 
 /* WebRTC Events */
 function registerRtcEvents(type, id, handler) {
-  peer = $peers[type][id];
+  const peer = $peers[type][id];
 
   peer.connection.onnegotiationneeded = () => handleRtcNegotiation(type, id);
   peer.connection.onicecandidate = ({ candidate }) => handleIceCandidate(type, id, candidate);
