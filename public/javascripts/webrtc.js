@@ -259,11 +259,7 @@ function handleIceCandidate(type, id, candidate) {
 function handleRtcPeerTrack(id) {
   return function({ track, streams: [stream] }) {
   console.log('Attempt to display peer media...');
-<<<<<<< HEAD
   displayStream(id , stream);
-=======
-  displayStream(`#peer ID: ${id}`, stream);
->>>>>>> 97f6672f632ab40a047793952cb55040e9285e8f
   }
 }
 
@@ -283,11 +279,7 @@ async function requestUserMedia(media_constraints) {
 
 function createVideoElement(id) {
   const figure = document.createElement('figure');
-<<<<<<< HEAD
   const figcaption = document.createElement('figcaption');
-=======
-  const figcaption = document.creaetElement('figcaption');
->>>>>>> 97f6672f632ab40a047793952cb55040e9285e8f
   const video = document.createElement('video');
   const video_attributes = {
     'autoplay': '',
@@ -308,14 +300,8 @@ function createVideoElement(id) {
 function displayStream(selector, stream) {
   let video_element = document.querySelector(selector);
   if (!video_element) {
-<<<<<<< HEAD
     console.log('creating new peer ID...');
     video_element = createVideoElement(selector);
-=======
-    let id = selector.split('#peer ID: ')[1];// need to create a new peer ID if none exists
-    console.log('creating new peer ID...');
-    video_element = createVideoElement(id);
->>>>>>> 97f6672f632ab40a047793952cb55040e9285e8f
   }
   let video = video_element.querySelector('video');
   video.srcObject = stream;
