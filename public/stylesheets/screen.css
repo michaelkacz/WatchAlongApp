@@ -304,7 +304,13 @@ header .welcome {
 
 #spacebar > span {
   display: inline-block;
-  font-size: 25px;
+  font-size: 30px;
+  color: brown;
+}
+
+#spacebar #toggle-video-sound {
+  margin-left: 1em;
+  color: blue;
 }
 
 /* Responsive Design */

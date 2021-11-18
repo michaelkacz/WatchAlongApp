@@ -32,7 +32,7 @@ const $self = {
   controlDCId: 99,
   videoId: '9-14W5Q1sfk',
   player: null,
-
+  playerState: null,
   /* Chiachi end */
 };
 
@@ -369,41 +369,83 @@ function onYouTubeIframeAPIReady() {
 
 // This will be called when the video player is ready.
 function onPlayerReady(event) {
-  console.log('ready...');
+  console.log('Player ready...');
   // Mute to prevent this error "Autoplay is only allowed when approved by the user, the site is activated by the user, or media is muted."
   $self.player.mute();
+  $self.playerState = $self.player.getPlayerState();
 }
 
 // The will be called when the player's state changes.
 function onPlayerStateChange(event) {
-  // TODO send command to everyone from some use cases
-  if (event.data == YT.PlayerState.PLAYING) {
-    console.log('playing...');
+  switch(event.data) {
+    case YT.PlayerState.PLAYING:
+      if ($self.playerState !== event.data) {
+        startVideo(event);
+      }
+      break;
+    case YT.PlayerState.PAUSED:
+      if ($self.playerState !== event.data) {
+        pauseVideo(event);
+      }
+      break;
+
+    case YT.PlayerState.CUED:
+      if ($self.playerState !== event.data) {
+        stop(event);
+      }
+      break;
   }
 }
 
 function startVideo(event) {
+  if ($self.playerState === YT.PlayerState.PLAYING) {
+    return;
+  }
   if (event) {
     // command initiate from the user so send the command to everyone
     sendControlCommand('start');
   }
   $self.player.playVideo();
+  $self.playerState = YT.PlayerState.PLAYING;
 }
 
 function pauseVideo(event) {
+  if ($self.playerState === YT.PlayerState.PAUSED) {
+    return;
+  }
+
   if (event) {
     // command initiate from the user so send the command to everyone
     sendControlCommand('pause');
   }
   $self.player.pauseVideo();
+  $self.playerState = YT.PlayerState.PAUSED;
 }
 
 function stopVideo(event) {
+  if ($self.playerState === YT.PlayerState.CUED) {
+    return;
+  }
+
   if (event) {
     // command initiate from the user so send the command to everyone
     sendControlCommand('stop');
   }
   $self.player.stopVideo();
+  $self.playerState = YT.PlayerState.CUED;
+}
+
+function toggleVolume(event) {
+  const icon = event.currentTarget.querySelector('.fas');
+  if (icon.classList.contains('fa-volume-mute')) {
+    icon.classList.remove('fa-volume-mute');
+    icon.classList.add('fa-volume-up');
+    $self.player.unMute();
+  } else {
+    icon.classList.remove('fa-volume-up');
+    icon.classList.add('fa-volume-mute');
+    $self.player.mute();
+  }
 }
 
 function sendControlCommand(command) {
@@ -433,6 +475,7 @@ function handleVideoControl({ data }) {
 document.getElementById('play-video').addEventListener('click', startVideo);
 document.getElementById('pause-video').addEventListener('click', pauseVideo);
 document.getElementById('stop-video').addEventListener('click', stopVideo);
+document.getElementById('toggle-video-sound').addEventListener('click', toggleVolume);
 
 
 /**
