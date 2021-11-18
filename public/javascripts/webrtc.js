@@ -32,7 +32,7 @@ const $self = {
   controlDCId: 99,
   videoId: '9-14W5Q1sfk',
   player: null,
-
+  playerState: null,
   /* Chiachi end */
 };
 
@@ -55,6 +55,19 @@ navigator.mediaDevices.getUserMedia($self.mediaConstraints).then((stream) => {
   $self.stream = stream;
 });
 */
+
+requestUserMedia($self.mediaConstraints);
+
+/*
+First page forms
+*/
+function handleUserNames(event) {
+  event.preventDefault();
+  const form = event.target;
+  const username = form.querySelector('#username-input').value;
+  const figcaption = document.querySelector('#self figcaption');
+  figcaption.innerText = username;
+}
 
 /** Signaling-Channel Setup **/
 const namespace = prepareNamespace(window.location.hash, true);
@@ -109,8 +122,13 @@ function handleChannelConnectedPeer(id) {
   establishVideoControlFeatures(id);
 }
 
-function initializeSelfAndPeerByIdAndType(type, id, isPolite) {
-  $self[type][id] = { isPolite };
+function initializeSelfAndPeerByIdAndType(type, id, politeness) {
+  $self[type][id] = {
+    isPolite: politeness,
+    isMakingOffer: false,
+    isIgnoringOffer: false,
+    isSettingRemoteAnswerPending: false
+  };
   $peers[type][id] = { connection: new RTCPeerConnection($self.rtcConfig) };
 }
 
@@ -192,7 +210,7 @@ function registerRtcEvents(type, id, handler) {
   peer.connection.onicecandidate = ({ candidate }) => handleIceCandidate(type, id, candidate);
 
   if (type === VIDEO_CHAT) {
-    peer.connection.ontrack = ({ streams: [stream] }) => handler(type, id, stream);
+    peer.connection.ontrack = handleRtcPeerTrack(id);
   } else {
     // The rest of types are data channel event
     peer.connection.ondatachannel = ({ channel }) => handler(type, id, channel);
@@ -238,9 +256,58 @@ function handleIceCandidate(type, id, candidate) {
   });
 }
 
+function handleRtcPeerTrack(id) {
+  return function({ track, streams: [stream] }) {
+  console.log('Attempt to display peer media...');
+  displayStream(id , stream);
+  }
+}
+
+//possible need for handleRtcConnectionStateChange
+
 /**
 David start
 */
+
+async function requestUserMedia(media_constraints) {
+  $self.stream = new MediaStream();
+  $self.media = await navigator.mediaDevices
+    .getUserMedia(media_constraints);
+  $self.stream.addTrack($self.media.getTracks()[0]);
+  displayStream('#self', $self.stream);
+}
+
+function createVideoElement(id) {
+  const figure = document.createElement('figure');
+  const figcaption = document.createElement('figcaption');
+  const video = document.createElement('video');
+  const video_attributes = {
+    'autoplay': '',
+    'playsinline': '',
+    'poster': '../images/placeholder.jpg'
+  };
+
+  figure.id = id;
+  figcaption.innerText = id;
+  for (let attr in video_attributes){
+    video.setAttribute(attr, video_attributes[attr]);
+  }
+  figure.appendChild(video);
+  figure.appendChild(figcaption);
+  return figure;
+}
+
+function displayStream(selector, stream) {
+  let video_element = document.querySelector(selector);
+  if (!video_element) {
+    console.log('creating new peer ID...');
+    video_element = createVideoElement(selector);
+  }
+  let video = video_element.querySelector('video');
+  video.srcObject = stream;
+  document.querySelector('#userVideos').appendChild(video_element);
+}
+
 function establishCallFeatures(id) {
   registerRtcEvents(VIDEO_CHAT, id, videoChatOnTrack);
   addStreamingMedia(id, $self.stream);
@@ -369,41 +436,83 @@ function onYouTubeIframeAPIReady() {
 
 // This will be called when the video player is ready.
 function onPlayerReady(event) {
-  console.log('ready...');
+  console.log('Player ready...');
   // Mute to prevent this error "Autoplay is only allowed when approved by the user, the site is activated by the user, or media is muted."
   $self.player.mute();
+  $self.playerState = $self.player.getPlayerState();
 }
 
 // The will be called when the player's state changes.
 function onPlayerStateChange(event) {
-  // TODO send command to everyone from some use cases
-  if (event.data == YT.PlayerState.PLAYING) {
-    console.log('playing...');
+  switch(event.data) {
+    case YT.PlayerState.PLAYING:
+      if ($self.playerState !== event.data) {
+        startVideo(event);
+      }
+      break;
+    case YT.PlayerState.PAUSED:
+      if ($self.playerState !== event.data) {
+        pauseVideo(event);
+      }
+      break;
+
+    case YT.PlayerState.CUED:
+      if ($self.playerState !== event.data) {
+        stop(event);
+      }
+      break;
   }
 }
 
 function startVideo(event) {
+  if ($self.playerState === YT.PlayerState.PLAYING) {
+    return;
+  }
   if (event) {
     // command initiate from the user so send the command to everyone
     sendControlCommand('start');
   }
   $self.player.playVideo();
+  $self.playerState = YT.PlayerState.PLAYING;
 }
 
 function pauseVideo(event) {
+  if ($self.playerState === YT.PlayerState.PAUSED) {
+    return;
+  }
+
   if (event) {
     // command initiate from the user so send the command to everyone
     sendControlCommand('pause');
   }
   $self.player.pauseVideo();
+  $self.playerState = YT.PlayerState.PAUSED;
 }
 
 function stopVideo(event) {
+  if ($self.playerState === YT.PlayerState.CUED) {
+    return;
+  }
+
   if (event) {
     // command initiate from the user so send the command to everyone
     sendControlCommand('stop');
   }
   $self.player.stopVideo();
+  $self.playerState = YT.PlayerState.CUED;
+}
+
+function toggleVolume(event) {
+  const icon = event.currentTarget.querySelector('.fas');
+  if (icon.classList.contains('fa-volume-mute')) {
+    icon.classList.remove('fa-volume-mute');
+    icon.classList.add('fa-volume-up');
+    $self.player.unMute();
+  } else {
+    icon.classList.remove('fa-volume-up');
+    icon.classList.add('fa-volume-mute');
+    $self.player.mute();
+  }
 }
 
 function sendControlCommand(command) {
@@ -433,6 +542,7 @@ function handleVideoControl({ data }) {
 document.getElementById('play-video').addEventListener('click', startVideo);
 document.getElementById('pause-video').addEventListener('click', pauseVideo);
 document.getElementById('stop-video').addEventListener('click', stopVideo);
+document.getElementById('toggle-video-sound').addEventListener('click', toggleVolume);
 
 
 /**
