@@ -406,6 +406,19 @@ function stopVideo(event) {
   $self.player.stopVideo();
 }
 
+function toggleVolume(event) {
+  const icon = event.currentTarget.querySelector('.fas');
+  if (icon.classList.contains('fa-volume-mute')) {
+    icon.classList.remove('fa-volume-mute');
+    icon.classList.add('fa-volume-up');
+    $self.player.unMute();
+  } else {
+    icon.classList.remove('fa-volume-up');
+    icon.classList.add('fa-volume-mute');
+    $self.player.mute();
+  }
+}
+
 function sendControlCommand(command) {
   for(let peerID in $peers[VIDEO_CONTROL]) {
     console.log('send command to', peerID);
@@ -433,6 +446,7 @@ function handleVideoControl({ data }) {
 document.getElementById('play-video').addEventListener('click', startVideo);
 document.getElementById('pause-video').addEventListener('click', pauseVideo);
 document.getElementById('stop-video').addEventListener('click', stopVideo);
+document.getElementById('toggle-video-sound').addEventListener('click', toggleVolume);
 
 
 /**
