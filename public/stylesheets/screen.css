@@ -73,7 +73,7 @@ Common end
 David start
 */
 #home-page main{
-  background-color: beige;
+  background-color: #FAC898;
   display: flex;
   justify-content: center;
   align-content: center;
@@ -111,10 +111,16 @@ David start
   border: 4px solid white;
 }
 
-#CreatePopUp, #JoinPopUp{
+#JoinPopUp {
   background-color: #FAC898;
   position: relative;
-  margin-top: 5em;
+  margin-top: 9em;
+}
+
+#CreatePopUp {
+  background-color: #FAC898;
+  position: relative;
+  margin-top: 10em;
 }
 
 #CreateForm{
