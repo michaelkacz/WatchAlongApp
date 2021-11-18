@@ -25,12 +25,12 @@ const $self = {
   /* David end */
 
   /*  Michael start */
-
+  controlTextId: 88,
   /*  Michael end */
 
   /* Chiachi start */
   controlDCId: 99,
-  videoId: 'npUlUdeU1vc',
+  videoId: '9-14W5Q1sfk',
   player: null,
 
   /* Chiachi end */
@@ -204,7 +204,7 @@ async function handleChannelSignal({ from, to, type, description, candidate, res
 
 /* WebRTC Events */
 function registerRtcEvents(type, id, handler) {
-  peer = $peers[type][id];
+  const peer = $peers[type][id];
 
   peer.connection.onnegotiationneeded = () => handleRtcNegotiation(type, id);
   peer.connection.onicecandidate = ({ candidate }) => handleIceCandidate(type, id, candidate);
@@ -339,10 +339,52 @@ Michael start
 */
 function establishTextChatFeatures(id) {
   registerRtcEvents(TEXT_CHAT, id, textChatOnDataChannel);
+  const peer = $peers[TEXT_CHAT][id];
+  peer.dataChannel = peer.connection.createDataChannel(TEXT_CHAT, {
+    negotiated: true,
+    id: $self.controlTextId,
+  });
+  peer.dataChannel.onmessage = handleTextMessage;
 }
 
 function textChatOnDataChannel(type, id, channel) {
   console.log('handle text chat ondatachannel');
+}
+
+const chatform = document.querySelector('#data');
+  chatform.addEventListener('submit', handleTextChat);
+
+  function handleTextMessage( {data} , sender) {
+    console.log('Message: ', data);
+    const log = document.querySelector('#chat-log');
+    const li = document.createElement('li');
+    li.innerText = data;
+    li.className = sender;
+    log.appendChild(li);
+  }
+
+  function handleTextChat(e) {
+    e.preventDefault();
+    const form = e.target;
+    const input = form.querySelector('#message');
+    const message = input.value;
+
+    appendMessage('self', message,);
+    for(let peerID in $peers[TEXT_CHAT]) {
+      console.log('Sending message to:', peerID);
+      $peers[TEXT_CHAT][peerID].dataChannel.send(message);
+    }
+
+    console.log('Message:', message);
+    input.value = '';
+  }
+
+function appendMessage (sender, message) {
+  const log = document.querySelector('#chat-log');
+  const li = document.createElement('li');
+  li.innerText = message;
+  li.className = sender;
+  log.appendChild(li);
 }
 
 
@@ -440,7 +482,7 @@ function sendControlCommand(command) {
 }
 
 function handleVideoControl({ data }) {
-  console.log(data);
+  //console.log(data);
   switch(data) {
     case 'start':
       startVideo();
@@ -452,7 +494,7 @@ function handleVideoControl({ data }) {
       stopVideo();
       break;
     default:
-      console.log('unknown command');
+      //console.log('unknown command');
   }
 }
 
