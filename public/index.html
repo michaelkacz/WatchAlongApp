@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" id="home-page">
+<head>
+  <title>Watch Party</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,shrink-to-fit=no" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/stylesheets/screen.css" />
+</head>
+<body>
+  <header>
+    <!-- Chiachi  -->
+    <a href=" " class="logo"><i class="fas fa-couch"></i> Watch Party</a>
+  </header>
+  <main>
+    <!-- David  -->
+    <article id="CreatePopUp">
+      <form id="CreateForm" action="#null" method="get">
+        <input id="RoomID" type="number" autocomplete="off" placeholder="859214" readonly/>
+        <label for="UserName">Display Name:</label>
+        <input id="SelfName" class="Name" type="text" autocomplete="off" placeholder="Your Name"/>
+        <button id="CreateFormButton" type="submit">Create Party</button>
+      </form>
+    </article>
+
+    <article id="ButtonOptions">
+      <button type="button" id="CreatePartyButton">Create a Party!</button>
+      <button type="button" id="JoinPartyButton">Join a Party!</button>
+    </article>
+
+    <article id="JoinPopUp">
+      <form id="JoinForm" action="#null" method="get">
+        <input id="RoomID" type="number" autocomplete="off" placeholder="859214"/>
+        <label for="UserName">Display Name:</label>
+        <input id="UserName" class="Name" type="text" autocomplete="off" placeholder="Your Name"/>
+        <button id="JoinFormButton" type="submit">Join Party</button>
+      </form>
+    </article>
+
+  </main>
+  <footer>
+
+  </footer>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/javascripts/main.js"></script>
+</body>
+</html>

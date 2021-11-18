@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Watch Party</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,shrink-to-fit=no" />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous" />
+  <link rel="stylesheet" href="../stylesheets/screen.css" />
+</head>
+<body>
+  <header id="header">
+    <!-- Chiachi  -->
+    <a href="#" class="logo"><i class="fas fa-couch"></i> Watch Party</a>
+    <div class="header-right">
+      <a href="#party-room">Chat <i class="far fa-comment-dots"></i></a>
+      <a type="button" onclick="alert('URL')">Copy link <i class="fas fa-link"></i></a>
+      <span class="welcome">Welcome! </span>
+      <span>Room ID: </span>
+      <a class="button" href="/">End the party</a>
+    </div>
+  </header>
+  <main>
+
+    <article id="video">
+      <!-- Chiachi  -->
+      <div id="player"></div>
+      <div id="spacebar">
+        <span id="play-video"><i class="far fa-play-circle"></i></span>
+        <span id="pause-video"><i class="far fa-pause-circle"></i></span>
+        <span id="stop-video"><i class="far fa-stop-circle"></i></span>
+      </div>
+    </article>
+
+    <article id="userVideos">
+      <!-- David  -->
+      <h2 id="videoTitle">Party Mates</h2>
+
+      <figure id="self">
+        <video id="selfVideo"
+          autoplay
+          muted
+          playsinline
+          poster="../images/placeholder.jpg">
+        </video>
+        <figcaption>This is a test</figcaption>
+      </figure>
+
+    </article>
+
+    <article id="data">
+      <h2 id="chat-head">Chat Room</h2>
+      <button class="closechat" type="button" id="closechat">Close Chat</button>
+      <button class="darkmode" type="button" id="dark"><i class="fas fa-moon"></i></button>
+      <button class="lightmode" type="button" id="light"><i class="fas fa-sun"></i></button>
+      <button class="openchat" type="button" id="openchat" hidden >Open Chat</button>
+        <form id="chatform" action="#null" class="chat-box">
+          <ol id="chat-log">
+          </ol>
+          <label for="message"></label>
+          <input id="message" type="text" required />
+          <button class="sendbutton" type="submit" id="send-chat">Send</button>
+        </form>
+      </article>
+
+  </main>
+  <footer>
+
+  </footer>
+  <script src="../socket.io/socket.io.js"></script>
+  <script src="../javascripts/main.js"></script>
+  <script src="../javascripts/webrtc.js"></script>
+</body>
+</html>
