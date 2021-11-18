@@ -256,12 +256,14 @@ function handleIceCandidate(type, id, candidate) {
   });
 }
 
-function handleRtcPeerTrack() {
-  return function({ streams: [stream] }) {
-  console.log('Attemp to display peer media...');
+function handleRtcPeerTrack(id) {
+  return function({ track, streams: [stream] }) {
+  console.log('Attempt to display peer media...');
   displayStream(`#peer ID: ${id}`, stream);
   }
 }
+
+//possible need for handleRtcConnectionStateChange
 
 /**
 David start
@@ -285,6 +287,7 @@ function createVideoElement(id) {
     'poster': '../images/placeholder.jpg'
   };
 
+  figure.id = id;
   figcaption.innerText = id;
   for (let attr in video_attributes){
     video.setAttribute(attr, video_attributes[attr]);
@@ -297,8 +300,9 @@ function createVideoElement(id) {
 function displayStream(selector, stream) {
   let video_element = document.querySelector(selector);
   if (!video_element) {
-    selector = sc.id; //need to create a new peer id if none exists
-    video_element = createVideoElement(selector);
+    let id = selector.split('#peer ID: ')[1];// need to create a new peer ID if none exists
+    console.log('creating new peer ID...');
+    video_element = createVideoElement(id);
   }
   let video = video_element.querySelector('video');
   video.srcObject = stream;
