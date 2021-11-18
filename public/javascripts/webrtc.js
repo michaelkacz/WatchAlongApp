@@ -287,7 +287,7 @@ function createVideoElement(id) {
     'poster': '../images/placeholder.jpg'
   };
 
-  figure.id = id;
+  figure.id = `video-${id}`;
   figcaption.innerText = id;
   for (let attr in video_attributes){
     video.setAttribute(attr, video_attributes[attr]);
