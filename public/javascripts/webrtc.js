@@ -274,7 +274,7 @@ async function requestUserMedia(media_constraints) {
   $self.media = await navigator.mediaDevices
     .getUserMedia(media_constraints);
   $self.stream.addTrack($self.media.getTracks()[0]);
-  displayStream('#self', $self.stream);
+  displayStream('self', $self.stream);
 }
 
 function createVideoElement(id) {
@@ -297,11 +297,11 @@ function createVideoElement(id) {
   return figure;
 }
 
-function displayStream(selector, stream) {
-  let video_element = document.querySelector(selector);
+function displayStream(id, stream) {
+  let video_element = document.querySelector(`#video-${id}`);
   if (!video_element) {
     console.log('creating new peer ID...');
-    video_element = createVideoElement(selector);
+    video_element = createVideoElement(id);
   }
   let video = video_element.querySelector('video');
   video.srcObject = stream;
