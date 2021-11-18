@@ -45,7 +45,7 @@ Michael start
 const createbutton = document.getElementById('CreateFormButton');
 if (createbutton) {
   createbutton.onclick = function createURL() {
-    location.href = 'https://localhost:3000/party-room';
+    location.href = '../party-room';
   }}
 
 const joininput = document.getElementById('RoomID');
@@ -53,7 +53,7 @@ const joinparty = document.getElementById('JoinFormButton');
 if (joinparty) {
   joinparty.onclick = function joinURL(e) {
     e.preventDefault();
-    location.href = 'https://localhost:3000/party-room/#' + joininput.value;
+    location.href = '../party-room/#' + joininput.value;
   }}
 
 //function to close chat
