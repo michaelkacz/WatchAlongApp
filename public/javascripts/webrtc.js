@@ -69,6 +69,7 @@ const sc = io.connect('/' + namespace, { autoConnect: false });
 registerChannelEvents();
 
 requestUserMedia($self.mediaConstraints).then(() => {
+  // TODO we should still open web socket at the begging, so need to adjust this logic and addTrack later
   sc.open();
 });
 
