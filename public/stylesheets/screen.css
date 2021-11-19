@@ -250,7 +250,7 @@ button.addvid {
  border-radius: 5px;
  border: 2px solid white;
  position: relative;
- bottom: 8.5em;
+ bottom: 5em;
  margin-left: 16em;
  padding: 1.5em;
 }
@@ -284,6 +284,8 @@ button.addvid {
   border: 0.25em;
   padding: 0.5em;
   border-radius: 15px;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 ol {
