@@ -51,14 +51,6 @@ const $peers = {
 };
 
 /*
-navigator.mediaDevices.getUserMedia($self.mediaConstraints).then((stream) => {
-  $self.stream = stream;
-});
-*/
-
-requestUserMedia($self.mediaConstraints);
-
-/*
 First page forms
 */
 function handleUserNames(event) {
@@ -75,7 +67,11 @@ const namespace = prepareNamespace(window.location.hash, true);
 const sc = io.connect('/' + namespace, { autoConnect: false });
 
 registerChannelEvents();
-sc.open();
+
+requestUserMedia($self.mediaConstraints).then(() => {
+  // TODO we should still open web socket at the begging, so need to adjust this logic and addTrack later
+  sc.open();
+});
 
 // Signaling Channel Events
 function registerChannelEvents() {
