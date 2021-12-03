@@ -4,7 +4,11 @@ const VIDEO_CONTROL = 'videoControl';
 
 const $self = {
   /* common start */
-  rtcConfig: null,
+  rtcConfig: {
+    iceServers: [{
+      urls: "stun:stun.l.google.com:19302"
+    }]
+  },
   id: null,
 
   // computed property names
