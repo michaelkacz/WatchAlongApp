@@ -4,7 +4,11 @@ const VIDEO_CONTROL = 'videoControl';
 
 const $self = {
   /* common start */
-  rtcConfig: null,
+  rtcConfig: {
+    iceServers: [{
+      urls: "stun:stun.l.google.com:19302"
+    }]
+  },
   id: null,
 
   // computed property names
@@ -36,7 +40,6 @@ const $self = {
   /* Chiachi end */
 };
 
-
 // For storing user video peers
 const $peers = {
   [VIDEO_CHAT]: {
@@ -53,13 +56,9 @@ const $peers = {
 /*
 First page forms
 */
-function handleUserNames(event) {
-  event.preventDefault();
-  const form = event.target;
-  const username = form.querySelector('#username-input').value;
-  const figcaption = document.querySelector('#self figcaption');
-  figcaption.innerText = username;
-}
+document.querySelector('#yourusername')
+.addEventListener('submitname', handleUsernameForm);
+
 
 /** Signaling-Channel Setup **/
 const namespace = prepareNamespace(window.location.hash, true);
@@ -307,6 +306,9 @@ function displayStream(id, stream) {
 function establishCallFeatures(id) {
   registerRtcEvents(VIDEO_CHAT, id, videoChatOnTrack);
   addStreamingMedia(id, $self.stream);
+  if ($self.username) {
+    shareUsername($self.username, id);
+  }
 }
 
 function videoChatOnTrack(type, id, stream) {
@@ -332,6 +334,29 @@ David end
 /**
 Michael start
 */
+function handleUsernameForm(event) {
+  event.preventDefault();
+  const form = event.target;
+  const username = form.querySelector('#username').value;
+  const figcaption = document.querySelector('#self figcaption');
+  figcaption.innerText = username;
+  $self.username = username;
+  for (let id in $peers) {
+    shareUsername(username, id);
+  }
+}
+
+function handleUserNames(event) {
+  event.preventDefault();
+  const form = event.target;
+  const username = form.querySelector('#yourusername').value;
+}
+
+function shareUsername(username, id) {
+  const peer = $peers[id];
+  const usernamedata = peer.connection.createDataChannel(`username-${username}`);
+}
+
 function establishTextChatFeatures(id) {
   registerRtcEvents(TEXT_CHAT, id, textChatOnDataChannel);
   const peer = $peers[TEXT_CHAT][id];
