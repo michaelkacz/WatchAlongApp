@@ -10,6 +10,9 @@ const $self = {
     }]
   },
   id: null,
+  // name should be set when creating or joining the party
+  // call sessionStorage.setItem('name', 'Test') in the console for direct testing
+  name: sessionStorage.getItem('name'),
 
   // computed property names
   [VIDEO_CHAT]: {
@@ -34,7 +37,9 @@ const $self = {
 
   /* Chiachi start */
   controlDCId: 99,
-  videoId: '9-14W5Q1sfk',
+  // videoId should be set when creating party
+  // call sessionStorage.setItem('videoId', '9-14W5Q1sfk') in the console for direct testing
+  videoId: sessionStorage.getItem('videoId'),
   player: null,
   playerState: null,
   /* Chiachi end */
@@ -42,6 +47,7 @@ const $self = {
 
 // For storing user video peers
 const $peers = {
+  names: {},
   [VIDEO_CHAT]: {
     // [peerId]: { connection, ... }
   },
@@ -63,7 +69,11 @@ document.querySelector('#yourusername')
 /** Signaling-Channel Setup **/
 const namespace = prepareNamespace(window.location.hash, true);
 
-const sc = io.connect('/' + namespace, { autoConnect: false });
+let scPath = `/${namespace}?name=${encodeURIComponent($self.name)}`
+if ($self.videoId) {
+  scPath += `&videoId=${encodeURIComponent($self.videoId)}`
+}
+const sc = io.connect(scPath, { autoConnect: false });
 
 registerChannelEvents();
 
@@ -87,10 +97,18 @@ function handleChannelConnect() {
   console.log(`Self ID: ${$self.id}`);
 }
 
-function handleChannelConnectedPeers(ids) {
-  console.log(`Connected peer IDs: ${ids.join(', ')}`);
-  for (let id of ids) {
+function handleChannelConnectedPeers({ peers, videoId }) {
+  if (!$self.videoId) {
+    $self.videoId = videoId;
+  }
+  console.log(`Vdieo ID: ${$self.videoId}`);
+  initYouTubeIframeAPI();
+
+  for (let { id, name } of peers) {
     if (id !== $self.id) {
+      console.log(`Connected peers ${id} - ${name}`);
+      $peers.names[id] = name;
+
       // $self is polite with already-connected peers
       initializeSelfAndPeerByIdAndType(VIDEO_CHAT, id, true);
       establishCallFeatures(id);
@@ -104,8 +122,10 @@ function handleChannelConnectedPeers(ids) {
   }
 }
 
-function handleChannelConnectedPeer(id) {
-  console.log(`ID of the new coming peer: ${id}`);
+function handleChannelConnectedPeer({ id, name }) {
+  console.log(`The new coming peer: ${id} - ${name}`);
+  $peers.names[id] = name;
+
   // $self is impolite with each newly connecting peer
   initializeSelfAndPeerByIdAndType(VIDEO_CHAT, id, false);
   establishCallFeatures(id);
@@ -432,11 +452,15 @@ function videoControlOnDataChannel(type, id, channel) {
   console.log('handle video control ondatachannel', type, id, channel);
 }
 
-const iframeAPIScript = document.createElement('script');
-iframeAPIScript.src = 'https://www.youtube.com/iframe_api';
-document.getElementsByTagName('body')[0].append(iframeAPIScript);
+
+function initYouTubeIframeAPI() {
+  const iframeAPIScript = document.createElement('script');
+  iframeAPIScript.src = 'https://www.youtube.com/iframe_api';
+  document.getElementsByTagName('body')[0].append(iframeAPIScript);
+}
 
 const playerDom = document.getElementById('player');
+
 // This will be executed after the YouTubeIframeAPI is loaded.
 function onYouTubeIframeAPIReady() {
   $self.player = new YT.Player('player', {
@@ -539,13 +563,15 @@ function toggleVolume(event) {
 function sendControlCommand(command) {
   for(let peerID in $peers[VIDEO_CONTROL]) {
     console.log('send command to', peerID);
-    $peers[VIDEO_CONTROL][peerID].dataChannel.send(command);
+    $peers[VIDEO_CONTROL][peerID].dataChannel.send(JSON.stringify({ from: $self.id, command }));
   }
 }
 
 function handleVideoControl({ data }) {
-  //console.log(data);
-  switch(data) {
+  const { from, command } = JSON.parse(data);
+  // TODO: add the message to DOM
+  console.log(`${$peers.names[from]} ${command} the video`);
+  switch(command) {
     case 'start':
       startVideo();
       break;

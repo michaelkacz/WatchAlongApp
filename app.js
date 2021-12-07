@@ -20,20 +20,36 @@ app.use('/users', usersRouter);
 
 module.exports = { app, io };
 
+// Store names and video ids for all rooms
+const rooms = {};
+
 const mp_namespaces = io.of(/^\/[a-z]{3}\-[a-z]{3}\-[a-z]{3}$/)
 mp_namespaces.on('connection',function(socket){
 
   const namespaces = socket.nsp;
+
+  if (!rooms[namespaces.name]) {
+    rooms[namespaces.name] = {
+      names: {},
+      videoId: ''
+    }
+  }
+
+  rooms[namespaces.name].names[socket.id] = socket.handshake.query.name;
+  if (socket.handshake.query.videoId) {
+    rooms[namespaces.name].videoId = socket.handshake.query.videoId;
+  }
+
   const peers = [];
   // build a list for the connected-peer IDs using array
   for (let peer of namespaces.sockets.keys()){
-    peers.push(peer);
+    peers.push({ id: peer, name: rooms[namespaces.name].names[peer] });
   }
   // send the array to the connecting peer
-  socket.emit('connected peers', peers);
+  socket.emit('connected peers', { peers, videoId: rooms[namespaces.name].videoId });
 
   // send the connecting peer ID to all connected peers
-  socket.broadcast.emit('connected peer', socket.id);
+  socket.broadcast.emit('connected peer', { id: socket.id, name: rooms[namespaces.name].names[socket.id] });
 
   // listen for signals
   socket.on('signal', function({to, ...rest}) {
