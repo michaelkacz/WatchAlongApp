@@ -214,18 +214,6 @@ button.addvid {
   border-bottom: 4px solid #FAC898;
 }
 
-#your-username {
-  background-color: inherit;
-  border: 1px solid #CCC;
-  color: #EEE;
-  padding: 5.5px;
-}
-
-#username-button {
-  margin-left: 5.5px;
-  padding: 5.5px;
-}
-
 #chat-box {
  padding: 5px;
  background-color: white;
