@@ -42,18 +42,24 @@ David end
 /**
 Michael start
 */
+const inputusername = document.getElementById('your-username');
 const createbutton = document.getElementById('CreateFormButton');
 if (createbutton) {
   createbutton.onclick = function createURL() {
     location.href = '../party-room';
+    sessionStorage.setItem('name', inputusername.value);
+    console.log('Username: ', inputusername.value);
   }}
 
+const joinusername = document.getElementById('your-join-username');
 const joininput = document.getElementById('RoomID');
 const joinparty = document.getElementById('JoinFormButton');
 if (joinparty) {
   joinparty.onclick = function joinURL(e) {
     e.preventDefault();
     location.href = '../party-room/#' + joininput.value;
+    sessionStorage.setItem('name', joinusername.value);
+    console.log('Username: ', joinusername.value);
   }}
 
 //function to close chat
