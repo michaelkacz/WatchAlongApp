@@ -64,7 +64,7 @@ requestUserMedia($self.mediaConstraints);
 /*
 First page forms
 */
-document.querySelector('#username-form')
+document.querySelector('#set-username')
   .addEventListener('submit', handleUsernameForm);
 
 /** Signaling-Channel Setup **/
@@ -266,7 +266,7 @@ function handleRtcPeerTrack(id) {
 function handleUsernameForm(event) {
   event.preventDefault();
   const form = event.target;
-  const username = form.querySelector('#username-input').value;
+  const username = form.querySelector('#your-usesrname').value;
   const figcaption = document.querySelector('#self figcaption');
   figcaption.innerText = username;
   $self.username = username;
@@ -356,7 +356,7 @@ Michael start
 function handleUsernameForm(event) {
   event.preventDefault();
   const form = event.target;
-  const username = form.querySelector('#username-input').value;
+  const username = form.querySelector('#your-username').value;
   const figcaption = document.querySelector('#video-self figcaption');
   figcaption.innerText = username;
   $self.username = username;
