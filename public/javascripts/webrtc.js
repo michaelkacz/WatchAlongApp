@@ -64,9 +64,8 @@ requestUserMedia($self.mediaConstraints);
 /*
 First page forms
 */
-document.querySelector('#yourusername')
-.addEventListener('submitname', handleUsernameForm);
-
+document.querySelector('#username-form')
+  .addEventListener('submit', handleUsernameForm);
 
 /** Signaling-Channel Setup **/
 const namespace = prepareNamespace(window.location.hash, true);
@@ -264,6 +263,18 @@ function handleRtcPeerTrack(id) {
 
 //possible need for handleRtcConnectionStateChange
 
+function handleUsernameForm(event) {
+  event.preventDefault();
+  const form = event.target;
+  const username = form.querySelector('#username-input').value;
+  const figcaption = document.querySelector('#self figcaption');
+  figcaption.innerText = username;
+  $self.username = username;
+  for (let id in $peers) {
+    shareUsername(username, id);
+  }
+}
+
 /**
 David start
 */
@@ -307,11 +318,16 @@ function displayStream(id, stream) {
   document.querySelector('#userVideos').appendChild(video_element);
 }
 
+function shareUsername(username, id) {
+  const peer = $peers[id];
+  const udc = peer.connection.createDataChannel(`username-${username}`);
+}
+
 function establishCallFeatures(id) {
   registerRtcEvents(VIDEO_CHAT, id, videoChatOnTrack);
   addStreamingMedia(id, $self.stream);
-  if ($self.username) {
-    shareUsername($self.username, id);
+  if ($self.yourusername) {
+    shareUsername($self.yourusername, id);
   }
 }
 
@@ -327,8 +343,6 @@ function addStreamingMedia(id, stream) {
     }
   }
 }
-
-
 /**
 David end
 */
@@ -338,11 +352,12 @@ David end
 /**
 Michael start
 */
+
 function handleUsernameForm(event) {
   event.preventDefault();
   const form = event.target;
-  const username = form.querySelector('#username').value;
-  const figcaption = document.querySelector('#self figcaption');
+  const username = form.querySelector('#username-input').value;
+  const figcaption = document.querySelector('#video-self figcaption');
   figcaption.innerText = username;
   $self.username = username;
   for (let id in $peers) {
