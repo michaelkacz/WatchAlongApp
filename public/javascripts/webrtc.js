@@ -62,8 +62,6 @@ const $peers = {
 /*
 First page forms
 */
-//document.querySelector('#set-username')
-//  .addEventListener('submit', handleUsernameForm);
 
 /** Signaling-Channel Setup **/
 const namespace = prepareNamespace(window.location.hash, true);
@@ -278,19 +276,7 @@ function handleRtcPeerTrack(id) {
 }
 
 //possible need for handleRtcConnectionStateChange
-/*
-function handleUsernameForm(event) {
-  event.preventDefault();
-  const form = event.target;
-  const username = form.querySelector('#your-usesrname').value;
-  const figcaption = document.querySelector('#self figcaption');
-  figcaption.innerText = username;
-  $self.username = username;
-  for (let id in $peers) {
-    shareUsername(username, id);
-  }
-}
-*/
+
 /**
 David start
 */
@@ -334,21 +320,9 @@ function displayStream(id, stream) {
   document.querySelector('#userVideos').appendChild(video_element);
 }
 
-/*
-function shareUsername(username, id) {
-  const peer = $peers[id];
-  const udc = peer.connection.createDataChannel(`username-${username}`);
-}
-*/
-
 function establishCallFeatures(id) {
   registerRtcEvents(VIDEO_CHAT, id, videoChatOnTrack);
   addStreamingMedia(id, $self.stream);
-/*
-  if ($self.yourusername) {
-    shareUsername($self.yourusername, id);
-  }
-*/
 }
 
 function videoChatOnTrack(type, id, stream) {
@@ -372,31 +346,6 @@ David end
 /**
 Michael start
 */
-/*
-function handleUsernameForm(event) {
-  event.preventDefault();
-  const form = event.target;
-  const username = form.querySelector('#your-username').value;
-  const figcaption = document.querySelector('#video-self figcaption');
-  figcaption.innerText = username;
-  $self.username = username;
-  for (let id in $peers) {
-    shareUsername(username, id);
-  }
-}
-
-function handleUserNames(event) {
-  event.preventDefault();
-  const form = event.target;
-  const username = form.querySelector('#yourusername').value;
-}
-
-function shareUsername(username, id) {
-  const peer = $peers[id];
-  const usernamedata = peer.connection.createDataChannel(`username-${username}`);
-}
-*/
-
 function establishTextChatFeatures(id) {
   registerRtcEvents(TEXT_CHAT, id, textChatOnDataChannel);
   const peer = $peers[TEXT_CHAT][id];
