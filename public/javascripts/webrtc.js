@@ -314,7 +314,7 @@ function createVideoElement(id) {
   };
 
   figure.id = `video-${id}`;
-  figcaption.innerText = id;
+  figcaption.innerText = $peers.names[id];
   for (let attr in video_attributes){
     video.setAttribute(attr, video_attributes[attr]);
   }
