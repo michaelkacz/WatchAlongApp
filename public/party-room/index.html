@@ -12,11 +12,10 @@
     <!-- Chiachi  -->
     <a href="#" class="logo"><i class="fas fa-couch"></i> Watch Party</a>
     <div class="header-right">
-      <a href="#party-room">Chat <i class="far fa-comment-dots"></i></a>
-      <a type="button" onclick="alert('URL')">Copy link <i class="fas fa-link"></i></a>
       <span class="welcome">Welcome! </span>
-      <span>Room ID: </span>
-      <a class="button" href="/">End the party</a>
+      <a href="#party-room">Chat <i class="far fa-comment-dots"></i></a>
+      <a type="button" onclick="alert('URL')">Copy Room ID<i class="fas fa-link"></i></a>
+      <a class="button" href="/">Leave the party</a>
     </div>
   </header>
   <main>
@@ -44,10 +43,6 @@
           poster="../images/placeholder.jpg">
         </video>
         <figcaption>Self</figcaption>
-          <!--<form id="set-username" action="#null" >
-            <input id="your-username" type="text" placeholder="Username"/>
-            <button id="username-button" type="submit">SET</button>
-          </form> -->
       </figure>
 
     </article>
@@ -59,6 +54,8 @@
       <button class="lightmode" type="button" id="light"><i class="fas fa-sun"></i></button>
       <button class="openchat" type="button" id="openchat" hidden >Open Chat</button>
         <form id="chatform" action="#null" class="chat-box">
+          <ol id="userlog">
+          </ol>
           <ol id="chat-log">
           </ol>
           <label for="message"></label>
