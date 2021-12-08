@@ -47,7 +47,7 @@ const createbutton = document.getElementById('CreateFormButton');
 const url = document.getElementById('youtubeURL');
 
 if (createbutton) {
-    createbutton.onclick = function createURL() {
+      createbutton.onclick = function createURL() {
       getVideoId();
       location.href = '../party-room';
       sessionStorage.setItem('name', inputusername.value);
@@ -64,6 +64,8 @@ function getVideoId() {
   sessionStorage.setItem('videoId', videoId);
 }
 
+
+const joinusername = document.getElementById('your-join-username');
 const joininput = document.getElementById('RoomID');
 const joinparty = document.getElementById('JoinFormButton');
 if (joinparty) {

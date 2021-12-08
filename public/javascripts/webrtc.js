@@ -62,9 +62,6 @@ const $peers = {
 /*
 First page forms
 */
-document.querySelector('#yourusername')
-.addEventListener('submitname', handleUsernameForm);
-
 
 /** Signaling-Channel Setup **/
 const namespace = prepareNamespace(window.location.hash, true);
@@ -303,7 +300,7 @@ function createVideoElement(id) {
   };
 
   figure.id = `video-${id}`;
-  figcaption.innerText = id;
+  figcaption.innerText = $peers.names[id];
   for (let attr in video_attributes){
     video.setAttribute(attr, video_attributes[attr]);
   }
@@ -326,9 +323,6 @@ function displayStream(id, stream) {
 function establishCallFeatures(id) {
   registerRtcEvents(VIDEO_CHAT, id, videoChatOnTrack);
   addStreamingMedia(id, $self.stream);
-  if ($self.username) {
-    shareUsername($self.username, id);
-  }
 }
 
 function videoChatOnTrack(type, id, stream) {
@@ -343,8 +337,6 @@ function addStreamingMedia(id, stream) {
     }
   }
 }
-
-
 /**
 David end
 */
@@ -354,29 +346,6 @@ David end
 /**
 Michael start
 */
-function handleUsernameForm(event) {
-  event.preventDefault();
-  const form = event.target;
-  const username = form.querySelector('#username').value;
-  const figcaption = document.querySelector('#self figcaption');
-  figcaption.innerText = username;
-  $self.username = username;
-  for (let id in $peers) {
-    shareUsername(username, id);
-  }
-}
-
-function handleUserNames(event) {
-  event.preventDefault();
-  const form = event.target;
-  const username = form.querySelector('#yourusername').value;
-}
-
-function shareUsername(username, id) {
-  const peer = $peers[id];
-  const usernamedata = peer.connection.createDataChannel(`username-${username}`);
-}
-
 function establishTextChatFeatures(id) {
   registerRtcEvents(TEXT_CHAT, id, textChatOnDataChannel);
   const peer = $peers[TEXT_CHAT][id];
