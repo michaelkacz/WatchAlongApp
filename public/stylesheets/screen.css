@@ -204,6 +204,11 @@ button.addvid {
   width: 120px;
 }
 
+#videoTitle {
+  font-weight: bold;
+  margin-top: 0.25em;
+}
+
 #chat-head {
   position: relative;
   padding-bottom: 5px;
