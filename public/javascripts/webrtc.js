@@ -74,10 +74,14 @@ const sc = io.connect(scPath, { autoConnect: false });
 
 registerChannelEvents();
 
+/*
 requestUserMedia($self.mediaConstraints).then(() => {
   // TODO we should still open web socket at the begging, so need to adjust this logic and addTrack later
   sc.open();
 });
+*/
+requestUserMedia($self.mediaConstraints);
+sc.open();
 
 // Signaling Channel Events
 function registerChannelEvents() {
@@ -390,7 +394,7 @@ const chatform = document.querySelector('#data');
       console.log('Sending message to:', peerID);
       $peers[TEXT_CHAT][peerID].dataChannel.send(message);
     }
-  
+
     console.log('Message sent by: ', username);
     console.log('Message:', message);
     input.value = '';
