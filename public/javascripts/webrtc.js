@@ -365,6 +365,20 @@ function textChatOnDataChannel(type, id, channel) {
 const chatform = document.querySelector('#data');
   chatform.addEventListener('submit', handleTextChat);
 
+  function handleTextMessage({data}) {
+      const { from, message } = JSON.parse(data);
+      console.log('Message: ', message);
+      const log = document.querySelector('#chat-log');
+      const sender = document.createElement('li');
+      sender.innerText = $peers.names[from];
+      sender.className = 'username-class';
+      log.appendChild(sender);
+      const li = document.createElement('li');
+      li.innerText = message;
+      log.appendChild(li);
+   }
+
+/*
   function handleTextMessage( {data} , sender) {
     console.log('Message: ', data);
     const log = document.querySelector('#chat-log');
@@ -373,7 +387,7 @@ const chatform = document.querySelector('#data');
     li.className = sender;
     log.appendChild(li);
   }
-
+*/
   function handleTextChat(e) {
     e.preventDefault();
     const form = e.target;
@@ -384,7 +398,8 @@ const chatform = document.querySelector('#data');
     appendUsername('peer', username,);
     for(let peerID in $peers[TEXT_CHAT]) {
       console.log('Username Displaying To: ', peerID);
-      $peers[TEXT_CHAT][peerID].dataChannel.send(username);
+      $peers[TEXT_CHAT][peerID].dataChannel.send(JSON.stringify({ from: $self.id, message }));
+      //$peers[TEXT_CHAT][peerID].dataChannel.send(username);
     }
 
     appendMessage('self', message,);
