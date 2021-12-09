@@ -59,6 +59,12 @@ const $peers = {
   },
 };
 
+// For users who enter the room via the copied link
+if (!$self.name) {
+  const urName = prompt("Please enter a name:");
+  $self.name = urName
+}
+
 /*
 First page forms
 */
