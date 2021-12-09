@@ -44,26 +44,12 @@ Michael start
 */
 const inputusername = document.getElementById('your-username');
 const createbutton = document.getElementById('CreateFormButton');
-const url = document.getElementById('youtubeURL');
-
 if (createbutton) {
-      createbutton.onclick = function createURL() {
-      getVideoId();
-      location.href = '../party-room';
-      sessionStorage.setItem('name', inputusername.value);
-      console.log('Username: ', inputusername.value)
-  }
-}
-
-function getVideoId() {
-  console.log('YouTube Link Provided: ', url.value);
-  let toString = url.value;
-  const videoSplit = toString.split("v=");
-  console.log('YouTube Video ID: ', videoSplit[1]);
-  const videoId = videoSplit[1];
-  sessionStorage.setItem('videoId', videoId);
-}
-
+  createbutton.onclick = function createURL() {
+    location.href = '../party-room';
+    sessionStorage.setItem('name', inputusername.value);
+    console.log('Username: ', inputusername.value);
+  }}
 
 const joinusername = document.getElementById('your-join-username');
 const joininput = document.getElementById('RoomID');
@@ -72,8 +58,9 @@ if (joinparty) {
   joinparty.onclick = function joinURL(e) {
     e.preventDefault();
     location.href = '../party-room/#' + joininput.value;
-  }
-}
+    sessionStorage.setItem('name', joinusername.value);
+    console.log('Username: ', joinusername.value);
+  }}
 
 //function to close chat
 const closechat = document.getElementById('closechat');
