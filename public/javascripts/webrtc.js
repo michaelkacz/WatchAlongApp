@@ -390,7 +390,7 @@ const chatform = document.querySelector('#data');
       console.log('Sending message to:', peerID);
       $peers[TEXT_CHAT][peerID].dataChannel.send(message);
     }
-  
+
     console.log('Message sent by: ', username);
     console.log('Message:', message);
     input.value = '';
@@ -553,8 +553,15 @@ function sendControlCommand(command) {
 
 function handleVideoControl({ data }) {
   const { from, command } = JSON.parse(data);
-  // TODO: add the message to DOM
-  console.log(`${$peers.names[from]} ${command} the video`);
+  const controlBubble = document.createElement('span');
+  controlBubble.className = 'control-bubble';
+  controlBubble.innerText = `${$peers.names[from]} ${command}s the video`;
+  const videoContainer = document.querySelector('#video');
+  videoContainer.appendChild(controlBubble);
+  setTimeout(() => {
+    controlBubble.remove();
+  }, 8000);
+
   switch(command) {
     case 'start':
       startVideo();
