@@ -58,6 +58,12 @@ mp_namespaces.on('connection',function(socket){
 
   // listen for disconnects
   socket.on('disconnect', function(){
+    // remove the name if the person diconnected
+    delete rooms[namespaces.name].names[socket.id];
+    if (!Object.keys(rooms[namespaces.name].names).length) {
+      // clean up if no one in the room
+      delete rooms[namespaces.name];
+    }
     namespaces.emit('disconnected peer', socket.id);
   });
 });
