@@ -376,14 +376,22 @@ const chatform = document.querySelector('#data');
     e.preventDefault();
     const form = e.target;
     const input = form.querySelector('#message');
+    const username = sessionStorage.getItem('name');
     const message = input.value;
+
+    appendUsername('peer', username,);
+    for(let peerID in $peers[TEXT_CHAT]) {
+      console.log('Username Displaying To: ', peerID);
+      $peers[TEXT_CHAT][peerID].dataChannel.send(username);
+    }
 
     appendMessage('self', message,);
     for(let peerID in $peers[TEXT_CHAT]) {
       console.log('Sending message to:', peerID);
       $peers[TEXT_CHAT][peerID].dataChannel.send(message);
     }
-
+  
+    console.log('Message sent by: ', username);
     console.log('Message:', message);
     input.value = '';
   }
@@ -396,6 +404,13 @@ function appendMessage (sender, message) {
   log.appendChild(li);
 }
 
+function appendUsername (peer, username) {
+  const userlog = document.querySelector('#chat-log');
+  const userli = document.createElement('li');
+  userli.innerText = username;
+  userli.classname = peer;
+  userlog.appendChild(userli);
+}
 
 /**
 Michael end
