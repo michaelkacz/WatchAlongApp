@@ -66,7 +66,7 @@ First page forms
 /** Signaling-Channel Setup **/
 const namespace = prepareNamespace(window.location.hash, true);
 
-document.querySelector('#roomID').innerText = ('Room ID: #' + namespace);
+document.querySelector('#roomID').innerText = ('Room ID: ' + namespace);
 
 let scPath = `/${namespace}?name=${encodeURIComponent($self.name)}`
 if ($self.videoId) {
