@@ -103,6 +103,27 @@ function handleChannelConnect() {
 function handleChannelConnectedPeers({ peers, videoId }) {
   if (!$self.videoId) {
     $self.videoId = videoId;
+  } else {
+    // Host has video id from beginning
+    // Add the End the party button (host only feature)
+    const endButton = document.createElement('a');
+    endButton.innerText = 'End the party';
+    endButton.className = 'button';
+    const container = document.querySelector('#nav-tool');
+    container.appendChild(endButton);
+    endButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      const answer = confirm("Do you want to end the party for all!?");
+      if (answer) {
+        sc.emit('signal', {
+          from: $self.id,
+          end: true
+        });
+        // clean up vidoe id in session storage
+        sessionStorage.removeItem('videoId');
+        location.href = '/';
+      }
+    });
   }
   console.log(`Vdieo ID: ${$self.videoId}`);
   initYouTubeIframeAPI();
@@ -154,10 +175,14 @@ function handleChannelDisconnectedPeer(id) {
   console.log(`Disconnected peer ID: ${id}`);
 }
 
-async function handleChannelSignal({ from, to, type, description, candidate, resend }) {
+async function handleChannelSignal({ from, to, type, description, candidate, resend, end }) {
   console.log('Heard signal event!');
-  const myself = $self[type][from];
-  const peer = $peers[type][from];
+  let myself = null;
+  let peer = null;
+  if (type) {
+    myself = $self[type][from];
+    peer = $peers[type][from];
+  }
 
   if (description) {
     console.log('Received SDP Signal:', description);
@@ -217,6 +242,9 @@ async function handleChannelSignal({ from, to, type, description, candidate, res
   } else if (resend) {
     console.log('Received resend signal');
     handleRtcNegotiation(type, from);
+  } else if (end) {
+    alert(`The host ${$peers.names[from]} has ended the party!`);
+    location.href = '/';
   }
 }
 
