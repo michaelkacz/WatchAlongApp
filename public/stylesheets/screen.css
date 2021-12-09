@@ -204,6 +204,11 @@ button.addvid {
   width: 120px;
 }
 
+#videoTitle {
+  font-weight: bold;
+  margin-top: 0.25em;
+}
+
 #chat-head {
   position: relative;
   padding-bottom: 5px;
@@ -270,12 +275,13 @@ button.addvid {
 
 #chat-log .self {
   background: #BFEFFF;
-  text-align: right;
+  text-align: left;
   border: 0.25em;
   padding: 0.5em;
   border-radius: 15px;
   margin-top: 0.5em;
   margin-bottom: 0.5em;
+  margin-left: 55%;
 }
 
 #chat-log .undefined {
@@ -286,6 +292,7 @@ button.addvid {
   border-radius: 15px;
   margin-top: 0.5em;
   margin-bottom: 0.5em;
+  margin-right: 55%;
 }
 
 ol {
