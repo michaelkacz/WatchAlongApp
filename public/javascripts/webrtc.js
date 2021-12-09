@@ -66,6 +66,8 @@ First page forms
 /** Signaling-Channel Setup **/
 const namespace = prepareNamespace(window.location.hash, true);
 
+document.querySelector('#roomID').innerText = ('Room ID: #' + namespace);
+
 let scPath = `/${namespace}?name=${encodeURIComponent($self.name)}`
 if ($self.videoId) {
   scPath += `&videoId=${encodeURIComponent($self.videoId)}`
@@ -390,7 +392,7 @@ const chatform = document.querySelector('#data');
       console.log('Sending message to:', peerID);
       $peers[TEXT_CHAT][peerID].dataChannel.send(message);
     }
-  
+
     console.log('Message sent by: ', username);
     console.log('Message:', message);
     input.value = '';
