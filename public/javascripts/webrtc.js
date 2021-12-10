@@ -86,7 +86,6 @@ const sc = io.connect(scPath, { autoConnect: false });
 registerChannelEvents();
 
 $self.userMediaPromise = requestUserMedia($self.mediaConstraints);
-
 sc.open();
 
 // Signaling Channel Events
