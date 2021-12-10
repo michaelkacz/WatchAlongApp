@@ -49,8 +49,8 @@ const url = document.getElementById('youtubeURL');
 if (createbutton) {
       createbutton.onclick = function createURL() {
       getVideoId();
-      location.href = '../party-room';
       sessionStorage.setItem('name', inputusername.value);
+      location.href = '../party-room';
       console.log('Username: ', inputusername.value)
   }
 }
