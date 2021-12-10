@@ -370,24 +370,15 @@ const chatform = document.querySelector('#data');
       console.log('Message: ', message);
       const log = document.querySelector('#chat-log');
       const sender = document.createElement('li');
-      sender.innerText = $peers.names[from];
-      sender.className = 'username-class';
+      sender.innerText = $peers.names[from] + ':';
+      sender.className = 'usernameclass';
       log.appendChild(sender);
       const li = document.createElement('li');
       li.innerText = message;
+      li.className = 'undefined';
       log.appendChild(li);
    }
 
-/*
-  function handleTextMessage( {data} , sender) {
-    console.log('Message: ', data);
-    const log = document.querySelector('#chat-log');
-    const li = document.createElement('li');
-    li.innerText = data;
-    li.className = sender;
-    log.appendChild(li);
-  }
-*/
   function handleTextChat(e) {
     e.preventDefault();
     const form = e.target;
@@ -399,7 +390,6 @@ const chatform = document.querySelector('#data');
     for(let peerID in $peers[TEXT_CHAT]) {
       console.log('Username Displaying To: ', peerID);
       $peers[TEXT_CHAT][peerID].dataChannel.send(JSON.stringify({ from: $self.id, message }));
-      //$peers[TEXT_CHAT][peerID].dataChannel.send(username);
     }
 
     appendMessage('self', message,);
@@ -424,8 +414,8 @@ function appendMessage (sender, message) {
 function appendUsername (peer, username) {
   const userlog = document.querySelector('#chat-log');
   const userli = document.createElement('li');
-  userli.innerText = username;
-  userli.classname = peer;
+  userli.innerText = username + ':';
+  userli.className = peer;
   userlog.appendChild(userli);
 }
 
