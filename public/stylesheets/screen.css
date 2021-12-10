@@ -176,7 +176,7 @@ David end
 Michael start
 */
 html {
-  background-color: #FAC898;
+  background-color: #F0E4D4;
 }
 
 div.addvid {
@@ -379,8 +379,25 @@ header .welcome {
 }
 
 .control-bubble {
+  font-size: 24px;
+  top: 50px;
+  left: 20px;
+  padding: 10px;
   position: absolute;
-  background-color: #fff;
+  background-color: rgba(255, 255, 0, 0.8);
+  border-radius: 5px;
+  color: #555;
+}
+
+#copy-link {
+  position: relative;
+}
+
+.copied {
+  position: absolute;
+  border-radius: 5px;
+  background-color: rgba(55, 55, 55, 0.8);
+  color: orange;
 }
 
 /* Responsive Design */
