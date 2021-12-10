@@ -300,6 +300,17 @@ ol {
   padding-bottom: 1em;
 }
 
+li.usernameclass {
+  font-weight: bold;
+  text-align: left;
+}
+
+li.peer {
+  font-weight: bold;
+  text-align: right;
+  padding-right: 13.5em;
+}
+
 /**
 Michael end
 */
