@@ -1,12 +1,4 @@
 # Project Three Future Plans
-In the future we plan to incorporate an admin feature into our project. After
-thinking about ways to go about it, we realized it would take substantial work
-to incorporate. However, for a future release, it is definitely possible. The
-admin privileges would be added based on who created the party allowing them
-to give peers ability to stop, play, and pause the YouTube video. Another
-feature we think would benefit our project greatly would be the ability to
-click on recommended YouTube videos. Once the selected video finishes or stops
-playing, there are recommended videos at the bottom of the screen able to be
-viewed. They, however, take you to the YouTube site. We think it would be very
-cool and beneficial if users in the party could select one and have it play
-through our application.
+In the future we plan to incorporate an admin feature into our project. After thinking about ways to go about it, we realized it would take substantial work to incorporate. However, for a future release, it is definitely possible. The admin privileges would be added based on who created the party allowing them to give peers ability to stop, play, and pause the YouTube video. Another feature we think would benefit our project greatly would be the ability to click on recommended YouTube videos. Once the selected video finishes or stops playing, there are recommended videos at the bottom of the screen able to be viewed. They, however, take you to the YouTube site. We think it would be very cool and beneficial if users in the party could select one and have it play through our application.
+
+Currently, we are using three RTCPeerConnections for transferring three different types of data (video chat, text chat, and video control) for each set of peers since we were concerning race conditions if we initiated all of them at the same time using one connection. After discussed with Professor Stolley, we realized this won't be an issue since WebRTC API is smart enough, we are planning to refactor the initialization of peer connection to use only one instance per set of peers to reduce the code complexity and increase the performance in the future.

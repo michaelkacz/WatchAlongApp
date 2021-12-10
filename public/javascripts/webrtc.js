@@ -14,6 +14,8 @@ const $self = {
   // call sessionStorage.setItem('name', 'Test') in the console for direct testing
   name: sessionStorage.getItem('name'),
 
+  userMediaPromise: null,
+
   // computed property names
   [VIDEO_CHAT]: {
     // [peerId]: { isPolit, ... }
@@ -62,6 +64,7 @@ const $peers = {
 // For users who enter the room via the copied link
 if (!$self.name) {
   const urName = prompt("Please enter a name:");
+  sessionStorage.setItem('name', urName);
   $self.name = urName
 }
 
@@ -82,10 +85,9 @@ const sc = io.connect(scPath, { autoConnect: false });
 
 registerChannelEvents();
 
-requestUserMedia($self.mediaConstraints).then(() => {
-  // TODO we should still open web socket at the begging, so need to adjust this logic and addTrack later
-  sc.open();
-});
+$self.userMediaPromise = requestUserMedia($self.mediaConstraints);
+
+sc.open();
 
 // Signaling Channel Events
 function registerChannelEvents() {
@@ -209,7 +211,7 @@ async function handleChannelSignal({ from, to, type, description, candidate, res
       console.error('Cannot set remote description', e);
       if (!myself.isSettingRemoteAnswerPending && peer.connection.signalingState === 'have-local-offer') {
         // the browser (Safari) can't handle state conflict, so reset myself and tell remote end to send again
-        // TODO reset connection
+        resetConnection(type, from);
       }
       return;
     }
@@ -304,6 +306,30 @@ function handleIceCandidate(type, id, candidate) {
   });
 }
 
+function resetConnection(type, id) {
+  const myself = $self[type][id];
+  const peer = $peers[type][id];
+  peer.connection.close();
+  myself.skipOffer = true;
+
+  switch(type) {
+    case VIDEO_CHAT:
+      initializeSelfAndPeerByIdAndType(VIDEO_CHAT, id, true);
+      establishCallFeatures(id);
+      break;
+    case TEXT_CHAT:
+      initializeSelfAndPeerByIdAndType(TEXT_CHAT, id, true);
+      establishTextChatFeatures(id);
+      break;
+    case VIDEO_CONTROL:
+      initializeSelfAndPeerByIdAndType(VIDEO_CONTROL, id, true);
+      establishVideoControlFeatures(id);peer.connection = new RTCPeerConnection($self.rtcConfig);
+      break;
+  }
+
+  sc.emit('signal', { from: $self.id, to: id, type, resend: true });
+}
+
 function handleRtcPeerTrack(id) {
   return function({ track, streams: [stream] }) {
   console.log('Attempt to display peer media...');
@@ -358,7 +384,9 @@ function displayStream(id, stream) {
 
 function establishCallFeatures(id) {
   registerRtcEvents(VIDEO_CHAT, id, videoChatOnTrack);
-  addStreamingMedia(id, $self.stream);
+  $self.userMediaPromise.then(() => {
+    addStreamingMedia(id, $self.stream);
+  });
 }
 
 function videoChatOnTrack(type, id, stream) {
