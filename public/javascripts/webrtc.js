@@ -14,6 +14,8 @@ const $self = {
   // call sessionStorage.setItem('name', 'Test') in the console for direct testing
   name: sessionStorage.getItem('name'),
 
+  userMediaPromise: null,
+
   // computed property names
   [VIDEO_CHAT]: {
     // [peerId]: { isPolit, ... }
@@ -59,12 +61,21 @@ const $peers = {
   },
 };
 
+// For users who enter the room via the copied link
+if (!$self.name) {
+  const urName = prompt("Please enter a name:");
+  sessionStorage.setItem('name', urName);
+  $self.name = urName
+}
+
 /*
 First page forms
 */
 
 /** Signaling-Channel Setup **/
 const namespace = prepareNamespace(window.location.hash, true);
+
+document.querySelector('#roomID').innerText = ('Room ID: ' + namespace);
 
 let scPath = `/${namespace}?name=${encodeURIComponent($self.name)}`
 if ($self.videoId) {
@@ -74,13 +85,7 @@ const sc = io.connect(scPath, { autoConnect: false });
 
 registerChannelEvents();
 
-/*
-requestUserMedia($self.mediaConstraints).then(() => {
-  // TODO we should still open web socket at the begging, so need to adjust this logic and addTrack later
-  sc.open();
-});
-*/
-requestUserMedia($self.mediaConstraints);
+$self.userMediaPromise = requestUserMedia($self.mediaConstraints);
 sc.open();
 
 // Signaling Channel Events
@@ -101,6 +106,27 @@ function handleChannelConnect() {
 function handleChannelConnectedPeers({ peers, videoId }) {
   if (!$self.videoId) {
     $self.videoId = videoId;
+  } else {
+    // Host has video id from beginning
+    // Add the End the party button (host only feature)
+    const endButton = document.createElement('a');
+    endButton.innerText = 'End the party';
+    endButton.className = 'button';
+    const container = document.querySelector('#nav-tool');
+    container.appendChild(endButton);
+    endButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      const answer = confirm("Do you want to end the party for all!?");
+      if (answer) {
+        sc.emit('signal', {
+          from: $self.id,
+          end: true
+        });
+        // clean up vidoe id in session storage
+        sessionStorage.removeItem('videoId');
+        location.href = '/';
+      }
+    });
   }
   console.log(`Vdieo ID: ${$self.videoId}`);
   initYouTubeIframeAPI();
@@ -152,10 +178,14 @@ function handleChannelDisconnectedPeer(id) {
   console.log(`Disconnected peer ID: ${id}`);
 }
 
-async function handleChannelSignal({ from, to, type, description, candidate, resend }) {
+async function handleChannelSignal({ from, to, type, description, candidate, resend, end }) {
   console.log('Heard signal event!');
-  const myself = $self[type][from];
-  const peer = $peers[type][from];
+  let myself = null;
+  let peer = null;
+  if (type) {
+    myself = $self[type][from];
+    peer = $peers[type][from];
+  }
 
   if (description) {
     console.log('Received SDP Signal:', description);
@@ -180,7 +210,7 @@ async function handleChannelSignal({ from, to, type, description, candidate, res
       console.error('Cannot set remote description', e);
       if (!myself.isSettingRemoteAnswerPending && peer.connection.signalingState === 'have-local-offer') {
         // the browser (Safari) can't handle state conflict, so reset myself and tell remote end to send again
-        // TODO reset connection
+        resetConnection(type, from);
       }
       return;
     }
@@ -215,6 +245,9 @@ async function handleChannelSignal({ from, to, type, description, candidate, res
   } else if (resend) {
     console.log('Received resend signal');
     handleRtcNegotiation(type, from);
+  } else if (end) {
+    alert(`The host ${$peers.names[from]} has ended the party!`);
+    location.href = '/';
   }
 }
 
@@ -272,6 +305,30 @@ function handleIceCandidate(type, id, candidate) {
   });
 }
 
+function resetConnection(type, id) {
+  const myself = $self[type][id];
+  const peer = $peers[type][id];
+  peer.connection.close();
+  myself.skipOffer = true;
+
+  switch(type) {
+    case VIDEO_CHAT:
+      initializeSelfAndPeerByIdAndType(VIDEO_CHAT, id, true);
+      establishCallFeatures(id);
+      break;
+    case TEXT_CHAT:
+      initializeSelfAndPeerByIdAndType(TEXT_CHAT, id, true);
+      establishTextChatFeatures(id);
+      break;
+    case VIDEO_CONTROL:
+      initializeSelfAndPeerByIdAndType(VIDEO_CONTROL, id, true);
+      establishVideoControlFeatures(id);peer.connection = new RTCPeerConnection($self.rtcConfig);
+      break;
+  }
+
+  sc.emit('signal', { from: $self.id, to: id, type, resend: true });
+}
+
 function handleRtcPeerTrack(id) {
   return function({ track, streams: [stream] }) {
   console.log('Attempt to display peer media...');
@@ -326,7 +383,9 @@ function displayStream(id, stream) {
 
 function establishCallFeatures(id) {
   registerRtcEvents(VIDEO_CHAT, id, videoChatOnTrack);
-  addStreamingMedia(id, $self.stream);
+  $self.userMediaPromise.then(() => {
+    addStreamingMedia(id, $self.stream);
+  });
 }
 
 function videoChatOnTrack(type, id, stream) {
@@ -367,14 +426,19 @@ function textChatOnDataChannel(type, id, channel) {
 const chatform = document.querySelector('#data');
   chatform.addEventListener('submit', handleTextChat);
 
-  function handleTextMessage( {data} , sender) {
-    console.log('Message: ', data);
-    const log = document.querySelector('#chat-log');
-    const li = document.createElement('li');
-    li.innerText = data;
-    li.className = sender;
-    log.appendChild(li);
-  }
+  function handleTextMessage({data}) {
+      const { from, message } = JSON.parse(data);
+      console.log('Message: ', message);
+      const log = document.querySelector('#chat-log');
+      const sender = document.createElement('li');
+      sender.innerText = $peers.names[from] + ':';
+      sender.className = 'usernameclass';
+      log.appendChild(sender);
+      const li = document.createElement('li');
+      li.innerText = message;
+      li.className = 'undefined';
+      log.appendChild(li);
+   }
 
   function handleTextChat(e) {
     e.preventDefault();
@@ -386,7 +450,7 @@ const chatform = document.querySelector('#data');
     appendUsername('peer', username,);
     for(let peerID in $peers[TEXT_CHAT]) {
       console.log('Username Displaying To: ', peerID);
-      $peers[TEXT_CHAT][peerID].dataChannel.send(username);
+      $peers[TEXT_CHAT][peerID].dataChannel.send(JSON.stringify({ from: $self.id, message }));
     }
 
     appendMessage('self', message,);
@@ -411,8 +475,8 @@ function appendMessage (sender, message) {
 function appendUsername (peer, username) {
   const userlog = document.querySelector('#chat-log');
   const userli = document.createElement('li');
-  userli.innerText = username;
-  userli.classname = peer;
+  userli.innerText = username + ':';
+  userli.className = peer;
   userlog.appendChild(userli);
 }
 
@@ -557,8 +621,7 @@ function sendControlCommand(command) {
 
 function handleVideoControl({ data }) {
   const { from, command } = JSON.parse(data);
-  // TODO: add the message to DOM
-  console.log(`${$peers.names[from]} ${command} the video`);
+  createBubbleMsg(document.querySelector('#video'), `${$peers.names[from]} ${command}s the video`, 'control-bubble', 8000);
   switch(command) {
     case 'start':
       startVideo();
@@ -570,15 +633,36 @@ function handleVideoControl({ data }) {
       stopVideo();
       break;
     default:
-      //console.log('unknown command');
+      console.log('unknown command');
   }
+}
+
+function copyLink(e){
+  e.preventDefault();
+  const tempText = document.createElement('textarea');
+  tempText.innerHTML = location.href;
+  document.body.appendChild(tempText);
+  tempText.select();
+  document.execCommand('copy');
+  tempText.remove();
+  createBubbleMsg(e.currentTarget, 'copied', 'copied', 5000);
+}
+
+function createBubbleMsg(container, text, className, time) {
+  const bubble = document.createElement('span');
+  bubble.className = className;
+  bubble.innerText = text;
+  container.appendChild(bubble);
+  setTimeout(() => {
+    bubble.remove();
+  }, time);
 }
 
 document.getElementById('play-video').addEventListener('click', startVideo);
 document.getElementById('pause-video').addEventListener('click', pauseVideo);
 document.getElementById('stop-video').addEventListener('click', stopVideo);
 document.getElementById('toggle-video-sound').addEventListener('click', toggleVolume);
-
+document.getElementById('copy-link').addEventListener('click', copyLink);
 
 /**
 Chiachi end
