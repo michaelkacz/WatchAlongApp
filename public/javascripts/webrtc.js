@@ -14,6 +14,8 @@ const $self = {
   // call sessionStorage.setItem('name', 'Test') in the console for direct testing
   name: sessionStorage.getItem('name'),
 
+  userMediaPromise: null,
+
   // computed property names
   [VIDEO_CHAT]: {
     // [peerId]: { isPolit, ... }
@@ -83,10 +85,9 @@ const sc = io.connect(scPath, { autoConnect: false });
 
 registerChannelEvents();
 
-requestUserMedia($self.mediaConstraints).then(() => {
-  // TODO we should still open web socket at the begging, so need to adjust this logic and addTrack later
-  sc.open();
-});
+$self.userMediaPromise = requestUserMedia($self.mediaConstraints);
+
+sc.open();
 
 // Signaling Channel Events
 function registerChannelEvents() {
@@ -383,7 +384,9 @@ function displayStream(id, stream) {
 
 function establishCallFeatures(id) {
   registerRtcEvents(VIDEO_CHAT, id, videoChatOnTrack);
-  addStreamingMedia(id, $self.stream);
+  $self.userMediaPromise.then(() => {
+    addStreamingMedia(id, $self.stream);
+  });
 }
 
 function videoChatOnTrack(type, id, stream) {
