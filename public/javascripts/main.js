@@ -47,12 +47,13 @@ const createbutton = document.getElementById('CreateFormButton');
 const url = document.getElementById('youtubeURL');
 
 if (createbutton) {
-      createbutton.onclick = function createURL() {
+  createbutton.addEventListener('click', (e) => {
+      e.preventDefault();
       getVideoId();
       sessionStorage.setItem('name', inputusername.value);
       location.href = '../party-room';
       console.log('Username: ', inputusername.value)
-  }
+  });
 }
 
 function getVideoId() {
